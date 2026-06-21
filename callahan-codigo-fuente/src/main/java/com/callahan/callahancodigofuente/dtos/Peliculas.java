@@ -20,10 +20,10 @@ public class Peliculas implements Serializable {
     private Long id;
 
     @JsonProperty("poster_path")
-    String posterPath;
+    private String posterPath;
 
 
-    String title;
+    private String title;
 
 
 }
