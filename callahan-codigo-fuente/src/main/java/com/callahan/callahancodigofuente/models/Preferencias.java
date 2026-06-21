@@ -15,9 +15,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
-//Recordar que preferencia depende (composicion)de un usuario por lo tanto su ID
-// debería de ser el mismo que el del usuario
 public class Preferencias {
 
   @Id

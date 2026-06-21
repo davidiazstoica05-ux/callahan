@@ -16,7 +16,7 @@ import java.util.List;
 public class RespuestaTmdbDto {
 
 
-List<Peliculas> results;
+    private List<Peliculas> results;
 
 
 }
