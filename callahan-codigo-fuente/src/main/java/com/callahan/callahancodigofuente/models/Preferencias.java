@@ -21,7 +21,7 @@ import java.util.Set;
 public class Preferencias {
 
   @Id
-  private long id;
+  private Long id;
 
 
   @OneToOne
