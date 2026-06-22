@@ -1,0 +1,43 @@
+🎯 Bloque 1: El Horizonte (Qué es Callahan y cuál es su fin)
+
+El Objetivo Final:
+Crear una aplicación web de recomendaciones de cine que elimine la "fatiga de decisión" (el síndrome de pasarse media hora buscando en Netflix sin ver nada). Callahan actúa como un "detective" privado o un recomendador empático que sabe exactamente qué recetarte.
+
+¿Cómo funciona su cerebro (El Motor Callahan)?
+La aplicación no recomienda al azar, sino que utiliza una arquitectura lógica de Filtrado Concéntrico (Funneling) en dos fases:
+
+    Filtro de Seguridad (Preferencias Estáticas): El sistema conoce el perfil del usuario (qué géneros odia, qué directores no soporta) y bloquea de raíz cualquier película que rompa estas reglas.
+
+    Filtro de Precisión (La Intención Diaria): En lugar de pedirle al usuario que defina una emoción compleja, le ofrece un "empujón" preguntándole qué efecto busca hoy (Ej: "Desconectar y reír", "Tensión y misterio"). El sistema coge las películas seguras del primer filtro, busca las que coincidan con la vibra del día, y las empuja al número uno de la lista.
+
+El Resultado Esperado:
+Una web limpia donde el usuario entra, hace un clic indicando qué le pide el cuerpo hoy, y recibe una lista hiper-personalizada e infalible de películas traídas directamente de la base de datos mundial de TMDB.
+🎒 Bloque 2: El Inventario (Lo que llevamos en la mochila)
+
+Hasta este momento, hemos blindado la arquitectura backend (el cerebro de la web). Esto es todo lo que ya tienes construido, configurado y funcionando:
+
+    1. Gestión y Planificación:
+
+        Tienes tu tablero Kanban (GitHub Projects) configurado, donde ya has empezado a mover tareas de Front-End y Back-End hacia la columna de completado, desglosando las tareas CRUD como un profesional.
+
+    2. Modelos de Base de Datos (Entidades JPA):
+
+        Usuario: La entidad principal con todos los datos de registro.
+
+        Preferencias: Conectada 1 a 1 con el usuario, usando el poder de @ElementCollection para guardar listas de géneros favoritos y vetados sin crear tablas basura.
+
+        Interaccion: El historial de películas puntuadas, que usa magia negra (@PrePersist) para auto-registrarse la fecha y hora.
+
+        EstadoAnimico: El diario del usuario, conectado de 1 a Muchos, para guardar su historial de peticiones a lo largo del tiempo.
+
+    3. El Diccionario Interno (Enum):
+
+        Has creado IntencionDiaria, un Enum súper inteligente que traduce las necesidades humanas ("Pasar miedo", "Llorar a mares") en listas exactas de IDs de géneros (27, 18...) para que la API de TMDB las entienda.
+
+    4. Los Formularios de Aduanas (DTOs):
+
+        Has construido las clases PeliculaTmdbDto y RespuestaTmdbDto equipadas con escudos de Jackson (@JsonIgnoreProperties) y traductores (@JsonProperty). Están listas para atrapar el JSON gigante de internet, ignorar la basura y quedarse solo con el ID, el título y el póster.
+
+    5. La Puerta a la Base de Datos (Repositorios):
+
+        Acabas de iniciar la capa de Spring Data JPA, creando la interfaz UsuarioRepository (después de corregir ese pequeño despiste de poner class) para que Spring Boot te autogenere todas las consultas SQL.
