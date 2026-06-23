@@ -43,4 +43,6 @@ public class Preferencias {
   private Long idDirectorFav;
   private Long idDirectorOdiado;
 
+
+  //Añadir atributo de las plataformasv que tiene el usario
 }
