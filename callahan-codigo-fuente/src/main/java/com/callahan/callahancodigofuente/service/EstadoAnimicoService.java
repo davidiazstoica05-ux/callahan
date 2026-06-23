@@ -1,0 +1,38 @@
+package com.callahan.callahancodigofuente.service;
+
+
+import com.callahan.callahancodigofuente.dtos.FiltroEmocionesDTO;
+import com.callahan.callahancodigofuente.models.EstadoAnimico;
+import com.callahan.callahancodigofuente.models.Usuario;
+import com.callahan.callahancodigofuente.repository.EstadoAnimicoRepository;
+import com.callahan.callahancodigofuente.service.base.BaseService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.time.LocalDate;
+
+@Service
+@RequiredArgsConstructor
+public class EstadoAnimicoService extends BaseService <EstadoAnimico, Long, EstadoAnimicoRepository>  {
+
+
+
+
+    public void agregarEstadoAnimico(@RequestBody FiltroEmocionesDTO peticion, Usuario usuario){
+
+
+        peticion.getEmociones().stream().forEach(e -> {
+
+            EstadoAnimico nuevoEstado = EstadoAnimico.builder()
+                    .fecha(LocalDate.now())
+                    .intencionDiaria(e)
+                    .usuario(usuario)
+                    .build();
+
+            this.save(nuevoEstado);
+
+        });
+    }
+
+}

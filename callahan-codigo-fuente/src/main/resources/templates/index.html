@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Callahan - Tu Detective de Cine</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fjalla+One&family=Oswald:wght@700&display=swap');
+
+        /* 1. PALETA Y RESET */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --rojo-bass: #D32F2F;
+            --negro-absoluto: #0A0A0A;
+            --blanco-roto: #F5F2EB;
+        }
+
+        body {
+            background-color: var(--blanco-roto);
+            color: var(--negro-absoluto);
+            font-family: 'Fjalla One', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* 2. BARRA DE NAVEGACIÓN (Estilo Letterboxd superior) */
+        header {
+            background-color: var(--negro-absoluto);
+            color: var(--blanco-roto);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 8px solid var(--rojo-bass);
+        }
+
+        .logo {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            letter-spacing: -1px;
+            transform: rotate(-2deg);
+        }
+
+        .nav-links button {
+            background: transparent;
+            color: var(--blanco-roto);
+            border: 2px solid var(--blanco-roto);
+            padding: 0.5rem 1rem;
+            font-family: 'Fjalla One', sans-serif;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .nav-links button:hover {
+            background: var(--blanco-roto);
+            color: var(--negro-absoluto);
+        }
+
+        /* 3. HERO SECTION (La zona de impacto de Saul Bass) */
+        .hero {
+            background-color: var(--rojo-bass);
+            padding: 6rem 5%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%); /* Corte diagonal abajo */
+            padding-bottom: 8rem;
+        }
+
+        .hero h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 6rem;
+            text-transform: uppercase;
+            letter-spacing: -3px;
+            text-shadow: 6px 6px 0px var(--negro-absoluto);
+            transform: rotate(2deg);
+            margin-bottom: 1rem;
+            color: var(--blanco-roto);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            background-color: var(--negro-absoluto);
+            color: var(--blanco-roto);
+            padding: 0.5rem 1.5rem;
+            transform: rotate(-1deg);
+            margin-bottom: 2rem;
+            box-shadow: -6px 6px 0px var(--blanco-roto);
+        }
+
+        .btn-principal {
+            background-color: var(--negro-absoluto);
+            color: var(--blanco-roto);
+            border: 4px solid var(--negro-absoluto);
+            padding: 1rem 2.5rem;
+            font-size: 1.5rem;
+            font-family: 'Fjalla One', sans-serif;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 6px 6px 0px var(--blanco-roto);
+            transition: transform 0.1s;
+        }
+
+        .btn-principal:hover {
+            transform: translate(4px, 4px);
+            box-shadow: 2px 2px 0px var(--blanco-roto);
+        }
+
+        /* 4. SECCIÓN DE CARACTERÍSTICAS (Las 3 columnas de Letterboxd) */
+        .features {
+            padding: 4rem 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-top: -3rem; /* Solapamos ligeramente con el hero */
+            position: relative;
+            z-index: 10;
+        }
+
+        .feature-card {
+            background-color: var(--blanco-roto);
+            border: 6px solid var(--negro-absoluto);
+            padding: 2rem;
+            box-shadow: 8px 8px 0px var(--rojo-bass);
+            transform: rotate(1deg);
+        }
+
+        .feature-card:nth-child(2) {
+            transform: rotate(-1deg);
+            box-shadow: -8px 8px 0px var(--rojo-bass);
+        }
+
+        .feature-card h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        /* 5. FOOTER */
+        footer {
+            background-color: var(--negro-absoluto);
+            color: var(--blanco-roto);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            border-top: 10px solid var(--rojo-bass);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 4rem; text-shadow: 4px 4px 0px var(--negro-absoluto); }
+            .hero p { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">CALLAHAN</div>
+        <div class="nav-links">
+            <button>Iniciar Sesión</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>CALLAHAN</h1>
+            <p>"Sé lo que estás pensando: ¿ha filtrado seis géneros o solo cinco?"</p>
+            <button class="btn-principal">Crear una cuenta gratis</button>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <h3>1. BLINDA TU PERFIL</h3>
+                <p>Dinos qué géneros odias y qué directores no soportas. Jamás volverás a cruzarte con una de sus películas. El filtro es implacable.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>2. CONFIEZA TU ESTADO</h3>
+                <p>¿Quieres tensión? ¿Llorar a mares? ¿Desconectar y reír? Dinos qué te pide el cuerpo hoy y ajustaremos el interrogatorio.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>3. CASO RESUELTO</h3>
+                <p>Olvídate de hacer scroll infinito. Te entregamos un expediente con las mejores películas exactas para este preciso momento.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Callahan - Motor de Recomendación de Cine</p>
+    </footer>
+
+</body>
+</html>

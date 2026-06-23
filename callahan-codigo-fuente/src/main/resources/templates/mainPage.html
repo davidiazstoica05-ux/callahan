@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Callahan - Tu Detective de Cine</title>
+    <link rel="stylesheet" href="../static/css/stylesheet.css">
+    <script src="../static/js/app.js" defer></script>
+
+</head>
+
+<body>
+
+    <div id="pantalla-inicio">
+        <h1>Callahan</h1>
+        <button id="btn-interrogatorio" class="btn-accion">¿Que necesitas hoy?</button>
+        <button id="btn-aleatorio" class="btn-accion btn-secundario">Película Aleatoria</button>
+    </div>
+
+    <div id="pantalla-interrogatorio" class="oculto">
+        <h2>El Interrogatorio</h2>
+        <div class="subtitulo">Selecciona un máximo de 2 opciones.</div>
+
+
+        <form id="formulario-emociones">
+            <div class="cuadricula-emociones">
+                <label>
+                    <input type="checkbox" name="emocion" value="DESCONECTAR_Y_REIR" class="checkbox-emocion">
+                    <span class="emocion-label"> Desconectar y reir </span>
+                </label>
+                <label>
+                    <input type="checkbox" name="emocion" value="PASAR_MIEDO" class="checkbox-emocion">
+                    <span class="emocion-label">Pasar miedo</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="emocion" value="TENSION_Y_MISTERIO" class="checkbox-emocion">
+                    <span class="emocion-label">Tensión y misterio</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="emocion" value="ESTIMULAR_LA_MENTE" class="checkbox-emocion">
+                    <span class="emocion-label">Estimular la mente</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="emocion" value="LLORAR_A_MARES" class="checkbox-emocion">
+                    <span class="emocion-label">Llorar a mares</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="emocion" value="TARDE_CONFORTABLE" class="checkbox-emocion">
+                    <span class="emocion-label">Tarde confortable</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="emocion" value="ADRENALINA_PURA" class="checkbox-emocion">
+                    <span class="emocion-label">Adrenalina pura</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="emocion" value="CULTURIZARME" class="checkbox-emocion">
+                    <span class="emocion-label">Culturizarme</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="emocion" value="CREER_EN_EL_AMOR" class="checkbox-emocion">
+                    <span class="emocion-label">Creer en el amor</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="emocion" value="DISFRUTAR_MUSICA" class="checkbox-emocion">
+                    <span class="emocion-label">Disfrutar música</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="emocion" value="EPICA_CLASICA" class="checkbox-emocion">
+                    <span class="emocion-label">Épica clásica</span>
+                </label>
+            </div>
+
+            <button type="submit" class="btn-accion">Resolver el Caso</button>
+        </form>
+    </div>
+
+</body>
+
+</html>

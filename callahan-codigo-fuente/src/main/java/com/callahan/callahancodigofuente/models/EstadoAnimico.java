@@ -18,17 +18,20 @@ public class EstadoAnimico {
 
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
     @ManyToOne
     @JoinColumn(name = "idUsuario")
-    @MapsId
     private Usuario usuario;
 
     @Enumerated(EnumType.STRING)
     private IntencionDiaria intencionDiaria;
 
     LocalDate fecha;
+
+
+
 
 }
