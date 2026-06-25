@@ -2,16 +2,21 @@ package com.callahan.callahancodigofuente.controller;
 
 
 import com.callahan.callahancodigofuente.dtos.FiltroEmocionesDTO;
+import com.callahan.callahancodigofuente.dtos.Peliculas;
 import com.callahan.callahancodigofuente.models.IntencionDiaria;
 import com.callahan.callahancodigofuente.models.Usuario;
 import com.callahan.callahancodigofuente.repository.UsuarioRepository;
 import com.callahan.callahancodigofuente.service.EstadoAnimicoService;
+import com.callahan.callahancodigofuente.service.TmdbService;
 import com.callahan.callahancodigofuente.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 //Devuelve datos puros en JSON, no una pagina
 @RestController
@@ -22,12 +27,16 @@ public class CallahanController {
 
 
     private final EstadoAnimicoService estadoAnimicoService;
-    private final UsuarioRepository usuarioRepository;
     private final UsuarioService usuarioService;
+    private  final TmdbService tmdbService;
 
 
     @PostMapping("/recomendar")
-    public List<IntencionDiaria> recibirDatosEmociones(@RequestBody FiltroEmocionesDTO peticion) {
+    public List<Peliculas> recibirDatosEmociones(@RequestBody FiltroEmocionesDTO peticion) {
+
+
+        String generosEnString;
+
 
         Usuario usuarioActual = usuarioService.findById(1L).orElseGet(() -> {
             Usuario nuevoUsuario = Usuario.builder()
@@ -41,6 +50,33 @@ public class CallahanController {
 
         estadoAnimicoService.agregarEstadoAnimico(peticion, usuarioActual);
 
-        return peticion.getEmociones();
+        generosEnString = transformarGenerosEnString(peticion);
+
+        return tmdbService.obtenerPeliculasPorGenero(generosEnString);
+
+    }
+
+
+
+
+    private String transformarGenerosEnString(FiltroEmocionesDTO peticion){
+
+        Set<IntencionDiaria> emociones = new HashSet<>(peticion.getEmociones());
+        Set<Integer> generos = new HashSet<>();
+
+
+        for ( IntencionDiaria emocion : emociones){
+
+            generos.addAll(emocion.getGenerosAsociados());
+
+        }
+
+        return generos.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
+
+
     }
 }
+
+
