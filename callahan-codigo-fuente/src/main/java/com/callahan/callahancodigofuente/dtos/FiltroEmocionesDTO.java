@@ -18,9 +18,8 @@ import java.util.List;
 public class FiltroEmocionesDTO {
 
 
-    //Tiene que ser igual que la clavae del objeto que he creado en el .js para que Spring pueda mapearlo
+    //Tiene que ser igual que la clavae del objeto que he creado en él .js para que Spring pueda mapearlo
     private List<IntencionDiaria> emociones;
-
 
 
 }

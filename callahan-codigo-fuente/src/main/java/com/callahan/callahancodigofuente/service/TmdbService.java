@@ -28,7 +28,9 @@ public class TmdbService {
 
     public List<Peliculas> obtenerPeliculasPorGenero(String idGenero) {
 
-        String urlFinal = apiUrl + "/discover/movie?api_key=" + apiKey + "&with_genres=" + idGenero;
+        //El & sirve para decirle a la url que además quieres aplicar otra regla
+        String urlFinal = apiUrl + "/discover/movie?api_key=" + apiKey + "&with_genres=" + idGenero + "&sort_by=vote_"
+                + "average.desc&vote_count.gte=500";
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -37,8 +39,6 @@ public class TmdbService {
         return respuesta.getResults();
 
     }
-
-
 
 
 }

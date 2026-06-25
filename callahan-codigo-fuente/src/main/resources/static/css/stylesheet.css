@@ -237,3 +237,81 @@ h2 {
     align-items: center;
     z-index: 2;
 }
+
+
+/* --- ZONA DE RESULTADOS TMDB: ESTILO SAUL BASS --- */
+
+.contenedor-saul-bass {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2.5rem;
+    width: 100%;
+    max-width: 1200px;
+    padding: 2rem 0;
+}
+
+.tarjeta-pelicula {
+    background-color: var(--rojo-bass);
+    border: 6px solid var(--negro-absoluto);
+    box-shadow: 12px 12px 0px var(--negro-absoluto);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: default;
+}
+
+.tarjeta-pelicula:hover {
+    transform: translate(-5px, -5px);
+    box-shadow: 17px 17px 0px var(--negro-absoluto);
+}
+
+.poster-pelicula {
+    width: 100%;
+    height: auto;
+    border: 4px solid var(--negro-absoluto);
+    filter: sepia(20%) contrast(110%);
+    /* Toque retro al póster */
+    margin-bottom: 1rem;
+    background-color: var(--negro-absoluto);
+}
+
+.titulo-pelicula {
+    font-family: 'Oswald', sans-serif;
+    color: var(--blanco-roto);
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 0px var(--negro-absoluto);
+}
+
+.nota-pelicula {
+    background-color: var(--negro-absoluto);
+    color: var(--blanco-roto);
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    font-size: 1.2rem;
+    transform: rotate(-2deg);
+    margin-bottom: 1rem;
+    align-self: flex-start;
+}
+
+.sinopsis-pelicula {
+    font-family: monospace;
+    color: var(--blanco-roto);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: justify;
+    background-color: rgba(10, 10, 10, 0.4);
+    padding: 1rem;
+    border-left: 4px solid var(--negro-absoluto);
+
+    overflow-y: auto;
+
+    /* Recorta el texto a 6 líneas si es muy largo */
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

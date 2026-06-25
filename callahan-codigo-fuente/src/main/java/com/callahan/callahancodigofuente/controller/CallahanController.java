@@ -59,6 +59,7 @@ public class CallahanController {
 
 
 
+    //Metodo encapsulado
     private String transformarGenerosEnString(FiltroEmocionesDTO peticion){
 
         Set<IntencionDiaria> emociones = new HashSet<>(peticion.getEmociones());

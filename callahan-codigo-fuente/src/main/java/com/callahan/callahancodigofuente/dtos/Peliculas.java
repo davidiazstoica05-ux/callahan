@@ -25,5 +25,10 @@ public class Peliculas implements Serializable {
 
     private String title;
 
+    @JsonProperty("vote_average")
+    private Double voteAverage;
+
+    private String overview;
+
 
 }

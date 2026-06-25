@@ -17,32 +17,32 @@ import java.util.Set;
 @Builder
 public class Preferencias {
 
-  @Id
-  private Long id;
+    @Id
+    private Long id;
 
 
-  @OneToOne
-  @JoinColumn(name = "idUsuario")
-  @MapsId
-  private Usuario usuario;
+    @OneToOne
+    @JoinColumn(name = "idUsuario")
+    @MapsId
+    private Usuario usuario;
 
 
-  @ElementCollection
-  private List<String> generosFavoritos;
+    @ElementCollection
+    private List<String> generosFavoritos;
 
 
-  @ElementCollection
-  private List<String> generosVetados;
+    @ElementCollection
+    private List<String> generosVetados;
 
-  private String epocaCinematograficaFav;
-  private String toleranciaALaDuracion;
+    private String epocaCinematograficaFav;
+    private String toleranciaALaDuracion;
 
-  @ElementCollection
-  private Set<String> plataformasContratadas;
+    @ElementCollection
+    private Set<String> plataformasContratadas;
 
-  private Long idDirectorFav;
-  private Long idDirectorOdiado;
+    private Long idDirectorFav;
+    private Long idDirectorOdiado;
 
 
-  //Añadir atributo de las plataformasv que tiene el usario
+    //Añadir atributo de las plataformas que tiene el usario
 }
