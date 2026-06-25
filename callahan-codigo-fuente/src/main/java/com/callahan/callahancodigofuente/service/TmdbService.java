@@ -1,13 +1,20 @@
 package com.callahan.callahancodigofuente.service;
 
 
+import com.callahan.callahancodigofuente.dtos.FiltroEmocionesDTO;
 import com.callahan.callahancodigofuente.dtos.Peliculas;
 import com.callahan.callahancodigofuente.dtos.RespuestaTmdbDto;
+import com.callahan.callahancodigofuente.models.EstadoAnimico;
+import com.callahan.callahancodigofuente.models.IntencionDiaria;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class TmdbService {
@@ -30,5 +37,8 @@ public class TmdbService {
         return respuesta.getResults();
 
     }
+
+
+
 
 }
