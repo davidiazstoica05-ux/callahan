@@ -1,9 +1,6 @@
 package com.callahan.callahancodigofuente.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -23,15 +20,20 @@ public class Usuario {
     private String nombreUsuario;
     private String nombreReal;
     private String apellido1;
-    private String apellido2;
     private String email;
     private String passw;
     private LocalDate fechaNacimiento;
-    private String Pais;
+    private String pais;
+
+    private LocalDate fechaRegistro;
+
+    @PrePersist
+    private void actualizarFechaRegistro() {
+
+        setFechaRegistro(LocalDate.now());
 
 
-
-
+    }
 
 
 }

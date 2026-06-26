@@ -1,32 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Fjalla+One&family=Oswald:wght@700&display=swap');
+/* --- app.css --- */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --rojo-bass: #D32F2F;
-    --negro-absoluto: #0A0A0A;
-    --blanco-roto: #F5F2EB;
-}
-
+/* FONDO Y TEXTURA DE LA APP */
 body {
     background-color: var(--rojo-bass);
     color: var(--blanco-roto);
-    font-family: 'Fjalla One', sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    overflow-x: hidden;
     padding: 2rem;
     position: relative;
 }
 
-/* TEXTURA DE PAPEL */
 body::before {
     content: "";
     position: fixed;
@@ -39,12 +25,7 @@ body::before {
     z-index: 50;
 }
 
-/* CLASE PARA OCULTAR ELEMENTOS */
-.oculto {
-    display: none !important;
-}
-
-/* ANIMACIONES */
+/* ANIMACIONES Y TÍTULOS */
 @keyframes caerCartel {
     0% {
         opacity: 0;
@@ -69,49 +50,31 @@ body::before {
     }
 }
 
-/* TIPOGRAFÍA Y TÍTULOS */
 h1 {
     font-family: 'Oswald', sans-serif;
     font-size: 7rem;
     color: var(--negro-absoluto);
     text-transform: uppercase;
     letter-spacing: -3px;
-    text-shadow: 2px 2px 0px var(--blanco-roto),
-        4px 4px 0px var(--blanco-roto),
-        6px 6px 0px var(--blanco-roto);
+    text-shadow: 2px 2px 0px var(--blanco-roto), 4px 4px 0px var(--blanco-roto), 6px 6px 0px var(--blanco-roto);
     margin-bottom: 3rem;
     text-align: center;
-
-    /* 1. ESTADO BASE: Le decimos que por defecto ya está torcido -2 grados */
     transform: rotate(-2deg);
-
-    /* 2. LE QUITAMOS EL FORWARDS a la animación */
     animation: caerCartel 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 h1:hover {
-    /* 1. Lo levantamos hacia arriba (translateY), lo torcemos un poco más (rotate) y lo agrandamos (scale) */
     transform: translateY(-8px) rotate(-4deg) scale(1.05);
-
-    /* 2. Hacemos la sombra de bloque el doble de grande para dar sensación de altura */
-    text-shadow: 4px 4px 0px var(--blanco-roto),
-        8px 8px 0px var(--blanco-roto),
-        12px 12px 0px var(--blanco-roto);
-
-    /* 3. Le cambiamos el cursor por una cruceta de mira, como buen detective */
+    text-shadow: 4px 4px 0px var(--blanco-roto), 8px 8px 0px var(--blanco-roto), 12px 12px 0px var(--blanco-roto);
     cursor: crosshair;
 }
-
-
 
 h2 {
     font-family: 'Oswald', sans-serif;
     font-size: 3.5rem;
     color: var(--blanco-roto);
-    text-shadow: 3px 3px 0px var(--negro-absoluto),
-        6px 6px 0px var(--negro-absoluto);
+    text-shadow: 3px 3px 0px var(--negro-absoluto), 6px 6px 0px var(--negro-absoluto);
     transform: rotate(1deg);
     margin-bottom: 1rem;
     text-align: center;
@@ -127,8 +90,7 @@ h2 {
     box-shadow: -4px 4px 0px var(--blanco-roto);
 }
 
-/* BOTONES PRINCIPALES */
-/* BOTONES PRINCIPALES */
+/* BOTONES DE LA APP */
 .btn-accion {
     background-color: var(--blanco-roto);
     color: var(--negro-absoluto);
@@ -144,12 +106,8 @@ h2 {
     margin: 0 auto 2rem auto;
     width: 100%;
     max-width: 400px;
-
-    /* 1. ESTADO BASE: Ahora por defecto son visibles y están torcidos 1 grado */
     opacity: 1;
     transform: rotate(1deg);
-
-    /* 2. ANIMACIÓN: Cambiamos 'forwards' por 'backwards' */
     animation: aparecerBoton 0.6s ease-out backwards;
     animation-delay: 0.3s;
 }
@@ -165,18 +123,7 @@ h2 {
 }
 
 .btn-secundario {
-    background-color: var(--blanco-roto);
-    color: var(--negro-absoluto);
-    box-shadow: 8px 8px 0px var(--negro-absoluto);
     animation-delay: 0.5s;
-}
-
-.btn-secundario:hover {
-    box-shadow: 10px 10px 0px var(--negro-absoluto);
-}
-
-.btn-secundario:active {
-    box-shadow: 2px 2px 0px var(--negro-absoluto);
 }
 
 /* FORMULARIO DE EMOCIONES */
@@ -230,7 +177,8 @@ h2 {
 }
 
 #pantalla-inicio,
-#pantalla-interrogatorio {
+#pantalla-interrogatorio,
+#pantalla-resultados {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -238,9 +186,7 @@ h2 {
     z-index: 2;
 }
 
-
-/* --- ZONA DE RESULTADOS TMDB: ESTILO SAUL BASS --- */
-
+/* ZONA DE RESULTADOS (TARJETAS TMDB) */
 .contenedor-saul-bass {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -258,7 +204,6 @@ h2 {
     display: flex;
     flex-direction: column;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    cursor: default;
 }
 
 .tarjeta-pelicula:hover {
@@ -271,7 +216,6 @@ h2 {
     height: auto;
     border: 4px solid var(--negro-absoluto);
     filter: sepia(20%) contrast(110%);
-    /* Toque retro al póster */
     margin-bottom: 1rem;
     background-color: var(--negro-absoluto);
 }
@@ -306,10 +250,6 @@ h2 {
     background-color: rgba(10, 10, 10, 0.4);
     padding: 1rem;
     border-left: 4px solid var(--negro-absoluto);
-
-    overflow-y: auto;
-
-    /* Recorta el texto a 6 líneas si es muy largo */
     display: -webkit-box;
     -webkit-line-clamp: 6;
     -webkit-box-orient: vertical;
