@@ -21,43 +21,7 @@ overlay.addEventListener('click', cerrarModales);
 
 
 
-
-
-//Gestón de dato Formularío 
-const formRegistro = document.getElementById("form-registro");
-
-
-formRegistro.addEventListener('submit', (event) => {
-
-    event.preventDefault();
-
-    const regUsuario = document.getElementById('reg-usuario').value;
-    const regEmail = document.getElementById('reg-email').value;
-    const regPassw = document.getElementById('reg-password').value;
-    const regPrimerApellido = document.getElementById('reg-apellido').value;
-    const regNombreReal = document.getElementById('reg-nombre').value;
-    const regFecha = document.getElementById('reg-fecha').value;
-    const regPais = document.getElementById('reg-pais').value;
-
-    console.log(regUsuario);
-
-    //El nombre exacto que hay en Java 
-    const nuevoDetective = {
-        nombreUsuario: regUsuario,
-        email: regEmail,
-        passw: regPassw,
-        apellido1: regPrimerApellido,
-        nombreReal: regNombreReal,
-        fechaNacimiento: regFecha,
-        pais: regPais
-    };
-
-    console.log(nuevoDetective);
-
-})
-
-
-//Cargar lista de paises 
+//Cargar lista de paises
 
 const datalistPaises = document.getElementById('lista-paises');
 
@@ -111,3 +75,82 @@ paises.forEach(pais => {
 
     datalistPaises.appendChild(nuevaOpcion);
 });
+
+//Gestón de dato Formularío 
+const formRegistro = document.getElementById("form-registro");
+
+
+formRegistro.addEventListener('submit', (event) => {
+
+    event.preventDefault();
+
+    const regUsuario = document.getElementById('reg-usuario').value;
+    const regEmail = document.getElementById('reg-email').value;
+    const regPassw = document.getElementById('reg-password').value;
+    const regPrimerApellido = document.getElementById('reg-apellido').value;
+    const regNombreReal = document.getElementById('reg-nombre').value;
+    const regFecha = document.getElementById('reg-fecha').value;
+    const regPais = document.getElementById('reg-pais').value;
+
+
+    const esValido = paises.includes(regPais);
+
+    if (esValido) {
+        console.log(regUsuario);
+
+        //El nombre exacto que hay en Java 
+        const nuevoDetective = {
+            nombreUsuario: regUsuario,
+            email: regEmail,
+            passw: regPassw,
+            apellido1: regPrimerApellido,
+            nombreReal: regNombreReal,
+            fechaNacimiento: regFecha,
+            pais: regPais
+        };
+
+        console.log(nuevoDetective);
+
+        fetch('http://localhost:8080/api/detectives/registro', {
+
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(nuevoDetective)
+
+        })
+            .then(respuesta => {
+
+                if (respuesta.ok) {
+
+                    window.location.href = "http://localhost:8080/TU_RUTA_A_MAIN_PAGE";
+                } else {
+
+                    console.error("Fallo al registrar en el servidor");
+                }
+            })
+            .catch(error => {
+
+                console.error("Error crítico de conexión:", error);
+            });
+
+
+
+    } else {
+
+        //Esto hay que llevarlo al backend
+        throw new Error("El país no se encuentra en la lista");
+
+
+    }
+
+
+
+
+
+
+
+})
+
+
