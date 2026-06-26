@@ -65,8 +65,7 @@ formularioEmociones.addEventListener('submit', (event) => {
         body: JSON.stringify(paqueteDatos)
     })
         .then(respuesta => respuesta.json())
-        // --- AQUÍ EMPIEZA EL CAMBIO ---
-        .then(datos => {
+        /        .then(datos => {
             // 1. Capturamos los elementos de la pantalla
             const pantallaForm = document.getElementById("pantalla-interrogatorio");
             const pantallaResultados = document.getElementById("pantalla-resultados");
@@ -98,8 +97,7 @@ formularioEmociones.addEventListener('submit', (event) => {
                 `;
             });
         })
-        // --- AQUÍ TERMINA EL CAMBIO ---
-        .catch(error => console.error("Error en el envío:", error));
+            .catch(error => console.error("Error en el envío:", error));
 
 });
 
