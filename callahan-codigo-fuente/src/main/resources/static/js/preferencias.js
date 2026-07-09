@@ -1,5 +1,15 @@
-const bolsasPeliculas = {
 
+//Esta parte del codigo esta muy comentada con IA para ayudarme a terminar de aclarar 
+// los conceptos 
+
+// =====================================================================
+// ZONA 1: ÁMBITO GLOBAL (Variables de Estado)
+// ---------------------------------------------------------------------
+// Estas variables nacen fuera de las funciones. Esto significa que tienen
+// "Scope Global": cualquier función del archivo puede leerlas y modificarlas.
+// =====================================================================
+
+const bolsasPeliculas = {
     accion: [155, 1566, 98, 76341, 245891],
     romance: [597, 11036, 313369, 114, 4584],
     terror: [348, 694, 539, 11324, 346364],
@@ -9,103 +19,120 @@ const bolsasPeliculas = {
     familiar: [862, 858, 12, 14160, 129]
 };
 
+let barajaFinal = [];      // Guardará los 7 IDs aleatorios (Números)
+let barajaPeliculas = [];  // Guardará los 7 expedientes completos (Objetos JSON de la API)
+
+//Indica qué película está viendo el usuario en este momento.
+let indiceActual = 0; 
 
 
+// =====================================================================
+// ZONA 2: FUNCIONES Y LÓGICA (Los engranajes de la aplicación)
+// =====================================================================
 
-let barajaFinal = [];
-let barajaPeliculas = [];
-
-function recorrerBolsas(bolsasPeliculas){
+/**
+ * Recorre el diccionario de géneros y extrae un ID aleatorio de cada uno.
+ */
+function recorrerBolsas(bolsasPeliculas) {
     for (const bolsa in bolsasPeliculas) {
-       
+        
+        // Medida de seguridad estándar al iterar objetos en JavaScript
         if (!Object.hasOwn(bolsasPeliculas, bolsa)) continue;
 
-        //Para acceder al array dentro del diccionario se hace así
-        const rnd = Math.floor(Math.random()* bolsasPeliculas[bolsa].length); 
+        // 1. Generamos un número aleatorio entre 0 y el tamaño del array de ese género
+        const rnd = Math.floor(Math.random() * bolsasPeliculas[bolsa].length); 
 
-
+        // 2. Usamos ese número aleatorio para extraer la película de esa posición exacta
         const idPelicula = bolsasPeliculas[bolsa][rnd];
 
-
-        barajaFinal.push(idPelicula)
-        
-        
+        // 3. Guardamos el ID extraído en nuestra variable global
+        barajaFinal.push(idPelicula);
     }
 }
 
+/**
+ * Función asíncrona que hace peticiones HTTP a nuestro propio servidor Java.
+ * Usamos async/await para obligar a JS a esperar a que lleguen los datos.
+ */
 async function descargarPosters() {
     
-    // Recorremos cada número (ID) que guardamos en la baraja
+    // Iteramos sobre los 7 números que acabamos de generar
     for (const id of barajaFinal) {
     
-        //Llamamos al controlador que hace la llamada a la API para no tener la apikey en el .js
+        // Conectamos con la pasarela segura de nuestro controlador en Spring Boot
         const urlCompleta = `http://localhost:8080/api/callahan/expedientes/${id}`;
+        
+        // Bloque try...catch: Evita que la aplicación colapse si un enlace falla
         try {
-            // 2. Llamamos a la API y pausamos el bucle hasta que responda
+            // await: Detiene el bucle aquí hasta que Java nos devuelva el paquete
             const response = await fetch(urlCompleta);
             
-            // 3. Abrimos el paquete y lo convertimos a JSON
+            // Convertimos el paquete de texto (JSON) a un Objeto real de JavaScript
             const datos = await response.json();
             
-            // 4. Metemos la película completa en nuestro array global
+            // Metemos el objeto completo en nuestra baraja global
             barajaPeliculas.push(datos);
             
         } catch (error) {
-            // Si falla una película en concreto (ej. se cae el internet un segundo), 
-            // nos avisa por consola pero el bucle sigue con la siguiente.
             console.error(`Error crítico al solicitar el expediente ${id}:`, error);
         }
     } 
 
-    // Al salir del bucle, imprimimos el resultado de todo el trabajo
     console.log("Expedientes descargados correctamente. Baraja lista:", barajaPeliculas);
     
-    //Se llama a la funcion aqui debido a la asincronía de js 
+    // CRÍTICO: Llamamos a pintarTarjeta() AQUÍ DENTRO.
+    // Solo así garantizamos que las tarjetas se pinten DESPUÉS de que las 
+    // películas hayan terminado de descargarse en el array.
     pintarTarjeta();
-
 }
 
-
-
-recorrerBolsas(bolsasPeliculas);
-descargarPosters();
-
-console.log(barajaPeliculas);
-
-let indiceActual = 0; 
-
+/**
+ * Lee los datos de la película actual y los inyecta en el HTML (DOM).
+ */
 function pintarTarjeta() {
    
-    // 1. El Control de Seguridad
-   if (indiceActual === barajaPeliculas.length) {
+    // 1. Control de flujo (Condición de salida)
+    // Si el índice alcanza el tamaño del array, ya no hay más películas.
+    if (indiceActual === barajaPeliculas.length) {
         window.location.href = "mainPage.html";
-        return;
+        return; // Detiene la ejecución de esta función inmediatamente
     } 
 
+    // Extraemos la película actual basándonos en el contador global
     const pelicula = barajaPeliculas[indiceActual];
-
-    console.log(pelicula);
     
+    // 2. Capturamos los elementos visuales del HTML (El DOM)
     const tituloDOM = document.getElementById("titulo-pelicula"); 
     const textoDOM = document.getElementById("director-pelicula");
     const posterDOM = document.getElementById("poster-pelicula");
 
+    // 3. Inyectamos la información en los elementos capturados
     tituloDOM.textContent = pelicula.title;
     
-    // Nota técnica: La llamada básica a TMDb no devuelve el director. 
-    // Como apaño profesional, extraemos solo los primeros 4 caracteres de la fecha (el año).
+    // Extraemos solo los primeros 4 caracteres (YYYY) de la fecha "YYYY-MM-DD"
     textoDOM.textContent = "Año de estreno: " + pelicula.release_date.substring(0, 4);
 
-    // 5. Inyectar el póster construyendo la URL completa
+    // Concatenamos la URL base oficial de TMDb con la ruta específica de esta imagen
     const urlBaseTMDb = "https://image.tmdb.org/t/p/w500";
     posterDOM.src = urlBaseTMDb + pelicula.poster_path;
 
-    // 6. El Toque de CSS (Animación de entrada)
+    // 4. Manipulación de CSS mediante clases de JavaScript
     posterDOM.classList.add("animacion-entrada");
     
-    // Le quitamos la clase después de medio segundo para que esté lista para la siguiente carta
+    // setTimeout: Un temporizador que elimina la clase de animación tras 500ms
+    // Esto deja la imagen "limpia" y preparada para cuando toque animar la siguiente
     setTimeout(() => {
         posterDOM.classList.remove("animacion-entrada");
     }, 500);
 }
 
+
+// =====================================================================
+// ZONA 3: EJECUCIÓN (El motor de arranque)
+// ---------------------------------------------------------------------
+// Aquí es donde realmente arranca el programa cuando el navegador lee 
+// el archivo de arriba a abajo.
+// =====================================================================
+
+recorrerBolsas(bolsasPeliculas);
+descargarPosters();
