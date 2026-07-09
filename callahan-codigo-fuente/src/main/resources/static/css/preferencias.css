@@ -1,0 +1,150 @@
+/* --- preferencias.css --- */
+
+body {
+    background-color: var(--rojo-bass);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.pantalla-preferencias {
+    background-color: var(--blanco-roto);
+    border: 4px solid var(--negro-absoluto);
+    box-shadow: 12px 12px 0px var(--negro-absoluto);
+    width: 100%;
+    max-width: 420px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.8rem;
+}
+
+.cabecera-preferencias {
+    text-align: center;
+    width: 100%;
+}
+
+.cabecera-preferencias h1 {
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    border-bottom: 4px solid var(--negro-absoluto);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.cabecera-preferencias p {
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.contenedor-tarjeta {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.tarjeta-saul-bass {
+    background-color: var(--blanco-roto);
+    border: 4px solid var(--negro-absoluto);
+    box-shadow: 8px 8px 0px var(--negro-absoluto);
+    width: 100%;
+    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.tarjeta-saul-bass img {
+    width: 100%;
+    height: 360px;
+    object-fit: cover;
+    border-bottom: 4px solid var(--negro-absoluto);
+}
+
+.info-pelicula {
+    padding: 0.8rem;
+    text-align: center;
+}
+
+.info-pelicula h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.info-pelicula p {
+    margin-top: 0.3rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.controles-swipe {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    width: 100%;
+}
+
+.btn-accion {
+    font-size: 1.8rem;
+    padding: 0.5rem 1.2rem;
+    background-color: var(--blanco-roto);
+    border: 4px solid var(--negro-absoluto);
+    box-shadow: 4px 4px 0px var(--negro-absoluto);
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-accion:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px var(--negro-absoluto);
+}
+
+.btn-rojo:hover { background-color: #ffcccc; }
+.btn-verde:hover { background-color: #ccffcc; }
+.btn-gris:hover { background-color: #e0e0e0; }
+
+.leyenda-controles {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    width: 100%;
+    margin-top: -0.8rem;
+}
+
+.leyenda-controles span {
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 60px;
+    text-align: center;
+    border-bottom: 2px solid var(--negro-absoluto);
+    padding-bottom: 0.2rem;
+}
+
+/* El estado inicial del póster (con una pequeña transición suave preparada) */
+#poster-pelicula {
+    transition: all 0.3s ease;
+}
+
+/* La clase que inyecta JavaScript temporalmente */
+.animacion-entrada {
+    animation: aparecerCarta 0.5s ease forwards;
+}
+
+/* Las instrucciones de la animación */
+@keyframes aparecerCarta {
+    0% {
+        opacity: 0;
+        transform: scale(0.90);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

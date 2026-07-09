@@ -60,6 +60,7 @@ public class CallahanController {
 
 
     //Metodo encapsulado
+    //Transforma los generos que llegan en map a string
     private String transformarGenerosEnString(FiltroEmocionesDTO peticion){
 
         Set<IntencionDiaria> emociones = new HashSet<>(peticion.getEmociones());
@@ -78,6 +79,17 @@ public class CallahanController {
 
 
     }
+
+    @GetMapping("/expedientes/{id}")
+    @CrossOrigin
+    public String obtenerPelicula(@PathVariable int id){
+
+        return tmdbService.obtenerPorId(id);
+
+
+
+    }
+
 }
 
 

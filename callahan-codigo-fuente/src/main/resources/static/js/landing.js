@@ -124,7 +124,7 @@ formRegistro.addEventListener('submit', (event) => {
 
                 if (respuesta.ok) {
 
-                    window.location.href = "http://localhost:8080/TU_RUTA_A_MAIN_PAGE";
+                    window.location.href = "preferencias.html";
                 } else {
 
                     console.error("Fallo al registrar en el servidor");
