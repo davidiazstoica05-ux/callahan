@@ -40,5 +40,18 @@ public class TmdbService {
 
     }
 
+    public String obtenerPorId(int id){
+
+
+      String urlCompleta = apiUrl + "/movie/" + id + "?api_key=" + apiKey + "&language=es-ES";
+
+      RestTemplate restTemplate = new RestTemplate();
+
+      String respuestaString = restTemplate.getForObject(urlCompleta , String.class);
+
+      return  respuestaString;
+
+    }
+
 
 }
