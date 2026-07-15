@@ -21,6 +21,10 @@ const bolsasPeliculas = {
 
 let barajaFinal = [];      // Guardará los 7 IDs aleatorios (Números)
 let barajaPeliculas = [];  // Guardará los 7 expedientes completos (Objetos JSON de la API)
+let peliculasGustadas = []; //Guarda las peliculas que le gustán al usuario 
+let peliculasNoGUstadas = [];
+let copiaBolsaPeliculas = [];
+
 
 //Indica qué película está viendo el usuario en este momento.
 let indiceActual = 0; 
@@ -34,21 +38,54 @@ let indiceActual = 0;
  * Recorre el diccionario de géneros y extrae un ID aleatorio de cada uno.
  */
 function recorrerBolsas(bolsasPeliculas) {
+
+    copiaBolsaPeliculas = bolsasPeliculas;
+
     for (const bolsa in bolsasPeliculas) {
         
+
         // Medida de seguridad estándar al iterar objetos en JavaScript
         if (!Object.hasOwn(bolsasPeliculas, bolsa)) continue;
 
-        // 1. Generamos un número aleatorio entre 0 y el tamaño del array de ese género
-        const rnd = Math.floor(Math.random() * bolsasPeliculas[bolsa].length); 
+        for (let i = 0; i < 3; i++) {
+            
+            const rnd = Math.floor(Math.random() * bolsasPeliculas[bolsa].length); 
 
-        // 2. Usamos ese número aleatorio para extraer la película de esa posición exacta
-        const idPelicula = bolsasPeliculas[bolsa][rnd];
+            const idPelicula = bolsasPeliculas[bolsa][rnd];
 
-        // 3. Guardamos el ID extraído en nuestra variable global
-        barajaFinal.push(idPelicula);
+            barajaFinal.push(idPelicula);
+
+            //Borra la pelicula para que no vuelva a salir 
+            bolsasPeliculas[bolsa].splice(rnd, 1);
+        }
     }
 }
+
+
+function evaluarPelicula(decision) {
+
+    const pelicula = barajaPeliculas[indiceActual]; 
+
+    if (decision === "aceptar") {
+    
+    peliculasGustadas.push(pelicula);
+
+    console.log("Peliculas gustadas: ", peliculasGustadas);
+    
+    } else if ( decision === "rechazar"){
+    
+    peliculasNoGUstadas.push(pelicula)
+    
+    console.log("no gustadas :", peliculasNoGUstadas);
+  
+
+    } 
+
+    indiceActual ++; 
+    pintarTarjeta();
+
+}
+
 
 /**
  * Función asíncrona que hace peticiones HTTP a nuestro propio servidor Java.
@@ -96,7 +133,7 @@ function pintarTarjeta() {
     if (indiceActual === barajaPeliculas.length) {
         window.location.href = "mainPage.html";
         return; // Detiene la ejecución de esta función inmediatamente
-    } 
+    }
 
     // Extraemos la película actual basándonos en el contador global
     const pelicula = barajaPeliculas[indiceActual];
@@ -136,3 +173,28 @@ function pintarTarjeta() {
 
 recorrerBolsas(bolsasPeliculas);
 descargarPosters();
+
+
+//zona 4 
+
+const btnMeGusta = document.getElementById("btn-gustar"); 
+const btnDescartar = document.getElementById("btn-rechazar");
+const btnIgnorar = document.getElementById("btn-ignorar");
+
+btnMeGusta.addEventListener("click", () => {
+    evaluarPelicula("aceptar");
+});
+
+btnIgnorar.addEventListener("click", () => {
+
+evaluarPelicula("ignorar");
+
+
+
+
+})
+
+
+btnDescartar.addEventListener("click", () => {
+    evaluarPelicula("rechazar");
+});
