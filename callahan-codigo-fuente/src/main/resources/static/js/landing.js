@@ -124,12 +124,25 @@ formRegistro.addEventListener('submit', (event) => {
 
                 if (respuesta.ok) {
 
-                    window.location.href = "preferencias.html";
+                    return respuesta.json();
+
                 } else {
 
-                    console.error("Fallo al registrar en el servidor");
+
+                    throw new Error("Error al tratar los datos");
+                    
                 }
+            
+
             })
+
+            .then( datos =>  {
+
+                localStorage.setItem("idUsuario",datos.idUsuario);
+                window.location.href = "preferencias.html";
+
+            })
+
             .catch(error => {
 
                 console.error("Error crítico de conexión:", error);

@@ -21,10 +21,13 @@ const bolsasPeliculas = {
 
 let barajaFinal = [];      // Guardará los 7 IDs aleatorios (Números)
 let barajaPeliculas = [];  // Guardará los 7 expedientes completos (Objetos JSON de la API)
-let peliculasGustadas = []; //Guarda las peliculas que le gustán al usuario 
-let peliculasNoGUstadas = [];
+
+
 let copiaBolsaPeliculas = [];
 
+
+let peliculasGustadas = []; //Guarda las peliculas que le gustán al usuario 
+let peliculasNoGUstadas = [];
 
 //Indica qué película está viendo el usuario en este momento.
 let indiceActual = 0; 
@@ -198,3 +201,32 @@ evaluarPelicula("ignorar");
 btnDescartar.addEventListener("click", () => {
     evaluarPelicula("rechazar");
 });
+
+//Procesamiento de datos 
+//Envio de los datos 
+
+//Creamos el paquete de datos: 
+
+const paqueDatos = {
+
+    idUsuario : localStorage.getItem("idUsuario"),
+    listaGustadas : peliculasGustadas, 
+    listaNoGustadas : peliculasNoGUstadas
+
+
+};
+
+//Lo mandamos al controlador 
+
+fetch('http://localhost:8080/preferencias/procesamientoDatos',{
+
+    method: 'POST',
+    headers:{
+        
+        'Content Type': 'application/JSON'
+    }, 
+    body: JSON.stringify(paqueDatos)
+
+})
+
+
