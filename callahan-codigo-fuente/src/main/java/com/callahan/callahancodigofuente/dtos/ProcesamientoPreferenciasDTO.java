@@ -22,8 +22,10 @@ import java.util.List;
 //la tiene el backend se vuelve loco y no sabra donde meter lo que le llega
 public class ProcesamientoPreferenciasDTO {
 
-    List<Integer> PeliculasGustadas;
-    List<Integer> PeliculasNoGustadas;
+    List<Integer> peliculasGustadas;
+    List<Integer> peliculasNoGustadas;
+    List<Integer> directoresOdiados;
+    List<Integer> directoresFav;
 
 
 

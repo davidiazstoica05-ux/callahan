@@ -28,7 +28,7 @@ public class Preferencias {
 
 
     @ElementCollection
-    private List<String> generosFavoritos;
+    private List<Integer> generosFavoritos;
 
 
     @ElementCollection

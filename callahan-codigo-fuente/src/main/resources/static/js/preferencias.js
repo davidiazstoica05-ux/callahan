@@ -25,6 +25,9 @@ let barajaPeliculas = [];  // Guardará los 7 expedientes completos (Objetos JSO
 
 let copiaBolsaPeliculas = [];
 
+let directoresGustados = [];
+let directoresOdiados = [];
+
 
 let peliculasGustadas = []; //Guarda las peliculas que le gustán al usuario 
 let peliculasNoGUstadas = [];
@@ -69,13 +72,53 @@ function evaluarPelicula(decision) {
 
     const pelicula = barajaPeliculas[indiceActual]; 
 
+
+    //Aceptar
     if (decision === "aceptar") {
     
+    const crew = pelicula.credits.crew;
+    
+    const director = crew.find(persona => persona.job === "Director"); 
+
+    if (director !== undefined) {
+
+        const directorID = director.id;
+
+        directoresGustados.push(directorID);
+
+        console.log("Director capturado con ID: " + directorID);
+
+    }else {
+
+        console.log("No se encontraron datos del director para esta película.");
+
+    }
+
     peliculasGustadas.push(pelicula);
 
     console.log("Peliculas gustadas: ", peliculasGustadas);
+
+    //Rechazar
     
     } else if ( decision === "rechazar"){
+
+    const crew = pelicula.credits.crew;
+    
+    const director = crew.find(persona => persona.job === "Director"); 
+
+    if (director !== undefined) {
+
+        const directorID = director.id;
+
+        directoresGustados.push(directorID);
+
+        console.log("Director capturado con ID: " + directorID);
+
+    }else {
+
+        console.log("No se encontraron datos del director para esta película.");
+
+    }
     
     peliculasNoGUstadas.push(pelicula)
     
@@ -210,8 +253,12 @@ btnDescartar.addEventListener("click", () => {
 const paqueDatos = {
 
     idUsuario : localStorage.getItem("idUsuario"),
+
     listaGustadas : peliculasGustadas, 
-    listaNoGustadas : peliculasNoGUstadas
+    listaNoGustadas : peliculasNoGUstadas,
+    directoresOdiados : directoresOdiados,
+    directoresFav : directoresGustados, 
+
 
 
 };
@@ -223,6 +270,7 @@ fetch('http://localhost:8080/preferencias/procesamientoDatos',{
     method: 'POST',
     headers:{
         
+
         'Content Type': 'application/JSON'
     }, 
     body: JSON.stringify(paqueDatos)
