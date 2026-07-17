@@ -20,7 +20,7 @@ public class PreferenciasService  extends BaseService <Preferencias, Long, Prefe
         Map<Integer, Integer> diccionario = new HashMap<>();
 
         List<Integer> peliculasGustadas = datosCrudos.getPeliculasGustadas();
-        List<Integer> peliculasNoGustadas = datosCrudos.getPeliculasGustadas();
+        List<Integer> peliculasNoGustadas = datosCrudos.getPeliculasNoGustadas();
 
 
         int puntosMeGusta = 2;

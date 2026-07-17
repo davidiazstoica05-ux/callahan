@@ -20,13 +20,14 @@ public class PreferenciasController {
     private final PreferenciasService preferenciasService;
 
     @PostMapping("/procesamientoDatos")
-    public ResponseEntity<Preferencias> procesarDatos(@RequestBody ProcesamientoPreferenciasDTO datosCrudos){
+    public ResponseEntity<Void> procesarDatos(@RequestBody ProcesamientoPreferenciasDTO datosCrudos){
 
     List <Map.Entry<Integer, Integer>> datosTratados = preferenciasService.procesarDatosCrudos(datosCrudos);
 
-    
 
+        return ResponseEntity.ok().build();
     }
+
 
 
 }
