@@ -28,6 +28,7 @@ let copiaBolsaPeliculas = [];
 let directoresGustados = [];
 let directoresOdiados = [];
 
+let añosLanzamientos = []; 
 
 let peliculasGustadas = []; //Guarda las peliculas que le gustán al usuario 
 let peliculasNoGUstadas = [];
@@ -91,6 +92,22 @@ function evaluarPelicula(decision) {
     }else {
 
         console.log("No se encontraron datos del director para esta película.");
+
+    }
+
+    const añoLanzamiento = pelicula.release_date; 
+
+    if (añoLanzamiento != undefined) {
+        
+
+        añosLanzamientos.push(añoLanzamiento.substring(0, 4)); 
+        console.log("Año de lanzamiento: " + añoLanzamiento); 
+        
+
+    } else {
+
+        console.log( "No se encontro el año de lanzamiento");
+
 
     }
 
@@ -258,6 +275,7 @@ const paqueDatos = {
     listaNoGustadas : peliculasNoGUstadas,
     directoresOdiados : directoresOdiados,
     directoresFav : directoresGustados, 
+    añosLanzamientos : añosLanzamientos
 
 
 

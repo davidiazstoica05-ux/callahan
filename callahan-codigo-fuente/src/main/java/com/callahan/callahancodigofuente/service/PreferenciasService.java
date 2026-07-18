@@ -2,6 +2,7 @@ package com.callahan.callahancodigofuente.service;
 
 import com.callahan.callahancodigofuente.dtos.Peliculas;
 import com.callahan.callahancodigofuente.dtos.ProcesamientoPreferenciasDTO;
+import com.callahan.callahancodigofuente.models.EpocasPeliculas;
 import com.callahan.callahancodigofuente.models.Preferencias;
 import com.callahan.callahancodigofuente.repository.PreferenciasRepository;
 import com.callahan.callahancodigofuente.repository.UsuarioRepository;
@@ -17,12 +18,11 @@ public class PreferenciasService  extends BaseService <Preferencias, Long, Prefe
 
     public void procesarDatosCrudos(@RequestBody ProcesamientoPreferenciasDTO datosCrudos) {
 
-        //Listas para luego construir el perfil de preferencias.
+        //Listas para luego construir el perfil de preferencias.++
         List<Integer> generosFavoritos = new ArrayList<>();
         List<Integer> generosDescartados = new ArrayList<>();
         List<Integer> directoresFavoritos = new ArrayList<>();
         List<Integer> directoresDescartados = new ArrayList<>();
-
         //CalcularPuntuaciones
         List<Map.Entry<Integer, Integer>> rankingGeneros = calcularPuntuaciones(
                 datosCrudos.getPeliculasGustadas(),
@@ -97,7 +97,44 @@ public class PreferenciasService  extends BaseService <Preferencias, Long, Prefe
         }
     }
 
+    private  List<EpocasPeliculas> conocerEpoca (List<String> aniosLanzamientos) {
+
+        List<EpocasPeliculas> epocaPeliculas = new ArrayList<>();
+
+
+
+        for (String anioPelicula : aniosLanzamientos){
+
+            int anioLanzaiento = Integer.parseInt(anioPelicula);
+
+          EpocasPeliculas epoca = EpocasPeliculas.obtenerEpoca(anioLanzaiento);
+
+          epocaPeliculas.add(epoca);
+
+        }
+
+        return epocaPeliculas;
+
+    }
+
+    /*private  EpocasPeliculas contarEpocas  (List<EpocasPeliculas> epocas){
+
+        if (!epocas.isEmpty()){
+
+            for (EpocasPeliculas epocaPelicula : epocas){
+
+
+
+
+            }
+
+
+        }
+    }*/
+
 }
+
+
 
 
 

@@ -34,7 +34,12 @@ public class Preferencias {
     @ElementCollection
     private List<String> generosVetados;
 
-    private String epocaCinematograficaFav;
+
+
+
+    @Enumerated(EnumType.STRING)
+    private EpocasPeliculas epocapelicula;
+
     private String toleranciaALaDuracion;
 
     @ElementCollection

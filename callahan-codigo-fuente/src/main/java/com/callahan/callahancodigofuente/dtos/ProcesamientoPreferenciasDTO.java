@@ -26,6 +26,8 @@ public class ProcesamientoPreferenciasDTO {
     List<Integer> peliculasNoGustadas;
     List<Integer> directoresOdiados;
     List<Integer> directoresFav;
+    List<Integer> añosLanzamientos;
+
 
 
 
