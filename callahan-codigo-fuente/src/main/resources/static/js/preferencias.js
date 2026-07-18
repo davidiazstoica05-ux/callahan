@@ -28,7 +28,8 @@ let copiaBolsaPeliculas = [];
 let directoresGustados = [];
 let directoresOdiados = [];
 
-let añosLanzamientos = []; 
+let aniosGustados = []; 
+let aniosDescartados = []
 
 let peliculasGustadas = []; //Guarda las peliculas que le gustán al usuario 
 let peliculasNoGUstadas = [];
@@ -95,13 +96,13 @@ function evaluarPelicula(decision) {
 
     }
 
-    const añoLanzamiento = pelicula.release_date; 
+    const anioLanzamiento = pelicula.release_date; 
 
-    if (añoLanzamiento != undefined) {
+    if (anioLanzamiento != undefined) {
         
 
-        añosLanzamientos.push(añoLanzamiento.substring(0, 4)); 
-        console.log("Año de lanzamiento: " + añoLanzamiento); 
+        aniosGustados.push(anioLanzamiento.substring(0, 4)); 
+        console.log("Año de lanzamiento: " + anioLanzamiento.substring(0,4)); 
         
 
     } else {
@@ -111,11 +112,13 @@ function evaluarPelicula(decision) {
 
     }
 
-    peliculasGustadas.push(pelicula);
+    peliculasGustadas.push(pelicula.id);
 
     console.log("Peliculas gustadas: ", peliculasGustadas);
 
-    //Rechazar
+    //======================================
+    //                 DESCARTAR
+    // =====================================
     
     } else if ( decision === "rechazar"){
 
@@ -136,8 +139,24 @@ function evaluarPelicula(decision) {
         console.log("No se encontraron datos del director para esta película.");
 
     }
-    
-    peliculasNoGUstadas.push(pelicula)
+
+    const anioLanzamiento = pelicula.release_date;
+
+    if(anioLanzamiento != null ){
+
+
+        aniosDescartados.push(anioLanzamiento.substring(0,4));
+
+      console.log("Año de lanzamiento: " + anioLanzamiento.substring(0,4)); 
+        
+
+    } else {
+
+        console.log( "No se encontro el año de lanzamiento");
+
+
+    }
+    peliculasNoGUstadas.push(pelicula.id);
     
     console.log("no gustadas :", peliculasNoGUstadas);
   
@@ -268,18 +287,14 @@ btnDescartar.addEventListener("click", () => {
 //Creamos el paquete de datos: 
 
 const paqueDatos = {
-
-    idUsuario : localStorage.getItem("idUsuario"),
-
-    listaGustadas : peliculasGustadas, 
-    listaNoGustadas : peliculasNoGUstadas,
+    id : localStorage.getItem("idUsuario"),
+    peliculasGustadas : peliculasGustadas, 
+    peliculasNoGustadas : peliculasNoGUstadas,
     directoresOdiados : directoresOdiados,
-    directoresFav : directoresGustados, 
-    añosLanzamientos : añosLanzamientos
-
-
-
-};
+    directoresFav : directoresGustados,      
+    aniosDescartes : aniosDescartados, 
+    aniosGustados : aniosGustados
+}
 
 //Lo mandamos al controlador 
 

@@ -32,7 +32,7 @@ public class Preferencias {
 
 
     @ElementCollection
-    private List<String> generosVetados;
+    private List<Integer> generosVetados;
 
 
 

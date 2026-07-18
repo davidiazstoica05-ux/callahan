@@ -22,11 +22,14 @@ import java.util.List;
 //la tiene el backend se vuelve loco y no sabra donde meter lo que le llega
 public class ProcesamientoPreferenciasDTO {
 
+
+    Long id;
     List<Integer> peliculasGustadas;
     List<Integer> peliculasNoGustadas;
     List<Integer> directoresOdiados;
     List<Integer> directoresFav;
-    List<Integer> añosLanzamientos;
+    List<String> aniosGustados;
+    List<String> aniosDescartes;
 
 
 
