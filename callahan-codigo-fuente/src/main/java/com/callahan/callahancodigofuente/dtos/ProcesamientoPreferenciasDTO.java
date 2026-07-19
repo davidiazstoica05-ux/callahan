@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -30,7 +31,8 @@ public class ProcesamientoPreferenciasDTO {
     List<Integer> directoresFav;
     List<String> aniosGustados;
     List<String> aniosDescartes;
-
+    List<Double> duracionPeliculasgustadas;
+    Set<String> plataformasContratadas;
 
 
 

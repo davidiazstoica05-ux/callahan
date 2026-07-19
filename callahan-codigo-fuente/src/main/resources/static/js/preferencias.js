@@ -1,4 +1,3 @@
-
 //Esta parte del codigo esta muy comentada con IA para ayudarme a terminar de aclarar 
 // los conceptos 
 
@@ -19,9 +18,8 @@ const bolsasPeliculas = {
     familiar: [862, 858, 12, 14160, 129]
 };
 
-let barajaFinal = [];      // Guardará los 7 IDs aleatorios (Números)
-let barajaPeliculas = [];  // Guardará los 7 expedientes completos (Objetos JSON de la API)
-
+let barajaFinal = [];       // Guardará los 21 IDs aleatorios (Números)
+let barajaPeliculas = [];   // Guardará los 21 expedientes completos (Objetos JSON de la API)
 
 let copiaBolsaPeliculas = [];
 
@@ -29,10 +27,12 @@ let directoresGustados = [];
 let directoresOdiados = [];
 
 let aniosGustados = []; 
-let aniosDescartados = []
+let aniosDescartados = [];
 
-let peliculasGustadas = []; //Guarda las peliculas que le gustán al usuario 
+let peliculasGustadas = []; //Guarda las peliculas que le gustan al usuario 
 let peliculasNoGUstadas = [];
+
+let duracionPeliculasGustadas = []; 
 
 //Indica qué película está viendo el usuario en este momento.
 let indiceActual = 0; 
@@ -43,203 +43,191 @@ let indiceActual = 0;
 // =====================================================================
 
 /**
- * Recorre el diccionario de géneros y extrae un ID aleatorio de cada uno.
+ * Recorre el diccionario de géneros y extrae 3 IDs aleatorios de cada uno (Total: 21).
  */
 function recorrerBolsas(bolsasPeliculas) {
-
     copiaBolsaPeliculas = bolsasPeliculas;
 
     for (const bolsa in bolsasPeliculas) {
-        
-
         // Medida de seguridad estándar al iterar objetos en JavaScript
         if (!Object.hasOwn(bolsasPeliculas, bolsa)) continue;
 
+        // Sacamos 3 películas por género para que el backend tenga margen de puntuación
         for (let i = 0; i < 3; i++) {
-            
             const rnd = Math.floor(Math.random() * bolsasPeliculas[bolsa].length); 
-
             const idPelicula = bolsasPeliculas[bolsa][rnd];
-
+            
             barajaFinal.push(idPelicula);
-
+            
             //Borra la pelicula para que no vuelva a salir 
             bolsasPeliculas[bolsa].splice(rnd, 1);
         }
     }
 }
 
-
 function evaluarPelicula(decision) {
+    // EL ESCUDO: Si hacen clic rápido pero la descarga simultánea aún no ha terminado
+    if (barajaPeliculas.length === 0 || !barajaPeliculas[indiceActual]) {
+        console.warn("Calma, detective. El expediente aún se está descargando...");
+        return; 
+    }
 
     const pelicula = barajaPeliculas[indiceActual]; 
 
-
-    //Aceptar
+    // =====================================
+    //                 ACEPTAR
+    // =====================================
     if (decision === "aceptar") {
-    
-    const crew = pelicula.credits.crew;
-    
-    const director = crew.find(persona => persona.job === "Director"); 
+        const crew = pelicula.credits.crew;
+        const director = crew.find(persona => persona.job === "Director"); 
 
-    if (director !== undefined) {
+        if (director !== undefined) {
+            const directorID = director.id;
+            directoresGustados.push(directorID);
+            console.log("Director capturado con ID: " + directorID);
+        } else {
+            console.log("No se encontraron datos del director para esta película.");
+        }
 
-        const directorID = director.id;
+        const anioLanzamiento = pelicula.release_date; 
+        if (anioLanzamiento != undefined) {
+            aniosGustados.push(anioLanzamiento.substring(0, 4)); 
+            console.log("Año de lanzamiento: " + anioLanzamiento.substring(0,4)); 
+        } else {
+            console.log("No se encontro el año de lanzamiento");
+        }
 
-        directoresGustados.push(directorID);
+        const duracionPelicula = pelicula.runtime; 
+        if (duracionPelicula != undefined) {
+            duracionPeliculasGustadas.push(duracionPelicula);
+            console.log("duracion de la pelicula: " + duracionPelicula);
+        }
 
-        console.log("Director capturado con ID: " + directorID);
+        peliculasGustadas.push(pelicula.id);
+        console.log("Peliculas gustadas: ", peliculasGustadas);
 
-    }else {
-
-        console.log("No se encontraron datos del director para esta película.");
-
-    }
-
-    const anioLanzamiento = pelicula.release_date; 
-
-    if (anioLanzamiento != undefined) {
-        
-
-        aniosGustados.push(anioLanzamiento.substring(0, 4)); 
-        console.log("Año de lanzamiento: " + anioLanzamiento.substring(0,4)); 
-        
-
-    } else {
-
-        console.log( "No se encontro el año de lanzamiento");
-
-
-    }
-
-    peliculasGustadas.push(pelicula.id);
-
-    console.log("Peliculas gustadas: ", peliculasGustadas);
-
-    //======================================
+    // =====================================
     //                 DESCARTAR
     // =====================================
-    
-    } else if ( decision === "rechazar"){
+    } else if (decision === "rechazar") {
+        const crew = pelicula.credits.crew;
+        const director = crew.find(persona => persona.job === "Director"); 
 
-    const crew = pelicula.credits.crew;
-    
-    const director = crew.find(persona => persona.job === "Director"); 
+        if (director !== undefined) {
+            const directorID = director.id;
+            directoresOdiados.push(directorID); // Lo mandamos a la lista de odiados
+            console.log("Director rechazado con ID: " + directorID);
+        } else {
+            console.log("No se encontraron datos del director para esta película.");
+        }
 
-    if (director !== undefined) {
-
-        const directorID = director.id;
-
-        directoresGustados.push(directorID);
-
-        console.log("Director capturado con ID: " + directorID);
-
-    }else {
-
-        console.log("No se encontraron datos del director para esta película.");
-
-    }
-
-    const anioLanzamiento = pelicula.release_date;
-
-    if(anioLanzamiento != null ){
-
-
-        aniosDescartados.push(anioLanzamiento.substring(0,4));
-
-      console.log("Año de lanzamiento: " + anioLanzamiento.substring(0,4)); 
+        const anioLanzamiento = pelicula.release_date;
+        if (anioLanzamiento != null) {
+            aniosDescartados.push(anioLanzamiento.substring(0,4));
+            console.log("Año de lanzamiento descartado: " + anioLanzamiento.substring(0,4)); 
+        } else {
+            console.log("No se encontro el año de lanzamiento");
+        }
         
-
-    } else {
-
-        console.log( "No se encontro el año de lanzamiento");
-
-
-    }
-    peliculasNoGUstadas.push(pelicula.id);
-    
-    console.log("no gustadas :", peliculasNoGUstadas);
-  
-
+        peliculasNoGUstadas.push(pelicula.id);
+        console.log("Peliculas no gustadas :", peliculasNoGUstadas);
     } 
 
-    indiceActual ++; 
+    indiceActual++; 
     pintarTarjeta();
-
 }
-
 
 /**
  * Función asíncrona que hace peticiones HTTP a nuestro propio servidor Java.
- * Usamos async/await para obligar a JS a esperar a que lleguen los datos.
+ * Descarga los 21 pósteres simultáneamente para evitar errores de red.
  */
 async function descargarPosters() {
-    
-    // Iteramos sobre los 7 números que acabamos de generar
-    for (const id of barajaFinal) {
-    
-        // Conectamos con la pasarela segura de nuestro controlador en Spring Boot
-        const urlCompleta = `http://localhost:8080/api/callahan/expedientes/${id}`;
+    try {
+        // Preparamos las 21 peticiones a la vez
+        const promesas = barajaFinal.map(id => 
+            fetch(`http://localhost:8080/api/callahan/expedientes/${id}`)
+            .then(res => res.json())
+        );
         
-        // Bloque try...catch: Evita que la aplicación colapse si un enlace falla
-        try {
-            // await: Detiene el bucle aquí hasta que Java nos devuelva el paquete
-            const response = await fetch(urlCompleta);
-            
-            // Convertimos el paquete de texto (JSON) a un Objeto real de JavaScript
-            const datos = await response.json();
-            
-            // Metemos el objeto completo en nuestra baraja global
-            barajaPeliculas.push(datos);
-            
-        } catch (error) {
-            console.error(`Error crítico al solicitar el expediente ${id}:`, error);
-        }
-    } 
-
-    console.log("Expedientes descargados correctamente. Baraja lista:", barajaPeliculas);
-    
-    // CRÍTICO: Llamamos a pintarTarjeta() AQUÍ DENTRO.
-    // Solo así garantizamos que las tarjetas se pinten DESPUÉS de que las 
-    // películas hayan terminado de descargarse en el array.
-    pintarTarjeta();
+        // Promise.all lanza todas y "congela" el código hasta que todas acaban
+        barajaPeliculas = await Promise.all(promesas);
+        console.log("Expedientes descargados correctamente de golpe. Baraja lista:", barajaPeliculas);
+        
+        // Empezamos a pintar cuando estamos 100% seguros de que todo bajó
+        pintarTarjeta();
+        
+    } catch (error) {
+        console.error("Error crítico al solicitar los expedientes:", error);
+    }
 }
 
 /**
  * Lee los datos de la película actual y los inyecta en el HTML (DOM).
+ * Además, al terminar las 21, empaqueta y envía los datos al backend.
  */
 function pintarTarjeta() {
-   
-    // 1. Control de flujo (Condición de salida)
-    // Si el índice alcanza el tamaño del array, ya no hay más películas.
-    if (indiceActual === barajaPeliculas.length) {
-        window.location.href = "mainPage.html";
-        return; // Detiene la ejecución de esta función inmediatamente
+    // 1. Control de flujo: Si llegamos a la 21, cerramos el juego y enviamos a Java
+    if (indiceActual === barajaFinal.length) {
+        
+        console.log("Procesando datos finales. ID rescatado: ", localStorage.getItem("idUsuario"));
+        
+        const paqueDatos = {
+            id : parseInt(localStorage.getItem("idUsuario")),
+            peliculasGustadas : peliculasGustadas, 
+            peliculasNoGustadas : peliculasNoGUstadas,
+            directoresOdiados : directoresOdiados,
+            directoresFav : directoresGustados,      
+            aniosDescartes : aniosDescartados, 
+            aniosGustados : aniosGustados,
+            duracionPeliculasgustadas : duracionPeliculasGustadas, 
+            plataformasContratadas : JSON.parse(localStorage.getItem("plataformasUsuario")) 
+        };
+
+        // Enviamos el paquete a Java
+        fetch('http://localhost:8080/preferencias/procesamientoDatos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify(paqueDatos)
+        })
+        .then(respuesta => {
+            if (respuesta.ok) {
+                console.log("¡Perfil de detective calibrado y guardado con éxito!");
+                window.location.href = "mainPage.html"; 
+            } else {
+                throw new Error("El servidor rechazó el paquete de preferencias.");
+            }
+        })
+        .catch(error => {
+            console.error("Fallo de comunicación con la base de datos:", error);
+            alert("Ha ocurrido un error al guardar tu perfil. Revisa la consola.");
+        });
+
+        // Este return evita intentar pintar una tarjeta que no existe
+        return; 
     }
 
-    // Extraemos la película actual basándonos en el contador global
+    // --- Si aún quedan películas por evaluar, pintamos la siguiente tarjeta ---
     const pelicula = barajaPeliculas[indiceActual];
     
-    // 2. Capturamos los elementos visuales del HTML (El DOM)
     const tituloDOM = document.getElementById("titulo-pelicula"); 
     const textoDOM = document.getElementById("director-pelicula");
     const posterDOM = document.getElementById("poster-pelicula");
-
-    // 3. Inyectamos la información en los elementos capturados
+    
     tituloDOM.textContent = pelicula.title;
     
-    // Extraemos solo los primeros 4 caracteres (YYYY) de la fecha "YYYY-MM-DD"
-    textoDOM.textContent = "Año de estreno: " + pelicula.release_date.substring(0, 4);
-
-    // Concatenamos la URL base oficial de TMDb con la ruta específica de esta imagen
+    // Validamos la fecha para no intentar cortar algo indefinido
+    const fecha = pelicula.release_date || "Desconocido";
+    textoDOM.textContent = "Año de estreno: " + fecha.substring(0, 4);
+    
     const urlBaseTMDb = "https://image.tmdb.org/t/p/w500";
-    posterDOM.src = urlBaseTMDb + pelicula.poster_path;
-
-    // 4. Manipulación de CSS mediante clases de JavaScript
+    // Si no tiene poster, ponemos uno por defecto para que no se rompa la vista
+    const rutaImagen = pelicula.poster_path ? urlBaseTMDb + pelicula.poster_path : 'https://via.placeholder.com/500x750/111111/F5F2EB?text=Sin+Pruebas';
+    posterDOM.src = rutaImagen;
+    
     posterDOM.classList.add("animacion-entrada");
     
-    // setTimeout: Un temporizador que elimina la clase de animación tras 500ms
-    // Esto deja la imagen "limpia" y preparada para cuando toque animar la siguiente
     setTimeout(() => {
         posterDOM.classList.remove("animacion-entrada");
     }, 500);
@@ -257,7 +245,9 @@ recorrerBolsas(bolsasPeliculas);
 descargarPosters();
 
 
-//zona 4 
+// =====================================================================
+// ZONA 4: BOTONES Y EVENTOS
+// =====================================================================
 
 const btnMeGusta = document.getElementById("btn-gustar"); 
 const btnDescartar = document.getElementById("btn-rechazar");
@@ -268,46 +258,9 @@ btnMeGusta.addEventListener("click", () => {
 });
 
 btnIgnorar.addEventListener("click", () => {
-
-evaluarPelicula("ignorar");
-
-
-
-
-})
-
+    evaluarPelicula("ignorar");
+});
 
 btnDescartar.addEventListener("click", () => {
     evaluarPelicula("rechazar");
 });
-
-//Procesamiento de datos 
-//Envio de los datos 
-
-//Creamos el paquete de datos: 
-
-const paqueDatos = {
-    id : localStorage.getItem("idUsuario"),
-    peliculasGustadas : peliculasGustadas, 
-    peliculasNoGustadas : peliculasNoGUstadas,
-    directoresOdiados : directoresOdiados,
-    directoresFav : directoresGustados,      
-    aniosDescartes : aniosDescartados, 
-    aniosGustados : aniosGustados
-}
-
-//Lo mandamos al controlador 
-
-fetch('http://localhost:8080/preferencias/procesamientoDatos',{
-
-    method: 'POST',
-    headers:{
-        
-
-        'Content Type': 'application/JSON'
-    }, 
-    body: JSON.stringify(paqueDatos)
-
-})
-
-

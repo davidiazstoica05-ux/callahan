@@ -40,7 +40,7 @@ public class Preferencias {
     @Enumerated(EnumType.STRING)
     private EpocasPeliculas epocapelicula;
 
-    private String toleranciaALaDuracion;
+    private double toleranciaALaDuracion;
 
     @ElementCollection
     private Set<String> plataformasContratadas;

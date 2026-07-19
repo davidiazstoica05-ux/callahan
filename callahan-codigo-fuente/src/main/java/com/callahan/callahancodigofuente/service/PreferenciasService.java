@@ -4,6 +4,7 @@ import com.callahan.callahancodigofuente.dtos.Peliculas;
 import com.callahan.callahancodigofuente.dtos.ProcesamientoPreferenciasDTO;
 import com.callahan.callahancodigofuente.models.EpocasPeliculas;
 import com.callahan.callahancodigofuente.models.Preferencias;
+import com.callahan.callahancodigofuente.models.Usuario;
 import com.callahan.callahancodigofuente.repository.PreferenciasRepository;
 import com.callahan.callahancodigofuente.repository.UsuarioRepository;
 import com.callahan.callahancodigofuente.service.base.BaseService;
@@ -22,12 +23,28 @@ public class PreferenciasService  extends BaseService <Preferencias, Long, Prefe
 
     public void procesarDatosCrudos(@RequestBody ProcesamientoPreferenciasDTO datosCrudos) {
 
+        // 1. EL CHIVATO: Imprimimos exactamente lo que JavaScript nos acaba de mandar
+        System.out.println("===== DEBUG DETECTIVE =====");
+        System.out.println("El DTO ha recibido el ID: " + datosCrudos.getId());
+
+
         //Listas para luego construir el perfil de preferencias.++
         List<Integer> generosFavoritos = new ArrayList<>();
         List<Integer> generosDescartados = new ArrayList<>();
 
         List<Integer> directoresFavoritos = new ArrayList<>();
         List<Integer> directoresDescartados = new ArrayList<>();
+
+        double tolerancia;
+
+        Usuario detective = usuarioRepository.findById(datosCrudos.getId()).orElse(null);
+
+        // 3. COMPROBACIÓN EXTRA
+        if (detective == null) {
+            System.err.println("¡ALERTA ROJA! Spring fue a la base de datos a buscar el ID " + datosCrudos.getId() + " pero dice que no existe.");
+        } else {
+            System.out.println("¡Éxito! Usuario encontrado: " + detective.getNombreReal());
+        }
 
         // Se cambian a Long (clase envoltorio) en lugar de int (primitivo)
         // para que puedan ser null si las listas vienen vacías, y coincidir con la entidad Preferencias.
@@ -52,6 +69,8 @@ public class PreferenciasService  extends BaseService <Preferencias, Long, Prefe
                 transformarAEnum(datosCrudos.getAniosDescartes())
         );
 
+        tolerancia = calcularMediaDuracionPeliculas(datosCrudos.getDuracionPeliculasgustadas());
+
         //ExtraerResultados
 
         extraerResultados(rankingGeneros, generosFavoritos, generosDescartados);
@@ -71,15 +90,15 @@ public class PreferenciasService  extends BaseService <Preferencias, Long, Prefe
         }
 
 
-        Preferencias preferencias = Preferencias.builder().
+            Preferencias preferencias = Preferencias.builder().
                 usuario(usuarioRepository.findUsuarioByIdUsuario(datosCrudos.getId()))
                 .idDirectorFav(directorFav)
                 .idDirectorOdiado(directorOdiado)
                 .generosVetados(generosDescartados)
                 .generosFavoritos(generosFavoritos)
-                .toleranciaALaDuracion(null)
+                .toleranciaALaDuracion(tolerancia)
                 .epocapelicula(epocaMasGustada)
-                .plataformasContratadas(null)
+                .plataformasContratadas(datosCrudos.getPlataformasContratadas())
                 .build();
 
         this.save(preferencias);
@@ -166,5 +185,31 @@ public class PreferenciasService  extends BaseService <Preferencias, Long, Prefe
         return  epocasPeliculas;
 
     }
+
+
+    private double calcularMediaDuracionPeliculas(List<Double> duracionPeliculasGustadas){
+
+        double duracionTotal = 0;
+        double colchon = 1.15;
+
+        if ( duracionPeliculasGustadas != null && !duracionPeliculasGustadas.isEmpty()){
+
+            for (double duracionPelicula: duracionPeliculasGustadas){
+
+
+                duracionTotal += duracionPelicula;
+
+            }
+
+            //Se hace para que el algoritmo tenga un poco de margen real a la hora de filtrar pelís
+            duracionTotal /= duracionPeliculasGustadas.size()  * colchon;
+
+
+        }
+
+        return duracionTotal;
+
+    }
+
 
 }

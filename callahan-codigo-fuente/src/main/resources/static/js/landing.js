@@ -120,35 +120,32 @@ formRegistro.addEventListener('submit', (event) => {
             body: JSON.stringify(nuevoDetective)
 
         })
-            .then(respuesta => {
+       .then(respuesta => {
+            if (respuesta.ok) {
+                return respuesta.json();
+            } else {
+                throw new Error("El servidor no devolvió un 200 OK.");
+            }
+        })
+        .then(datos => {
+            // 1. CONGELAMOS EL TIEMPO: Imprimimos exactamente qué devolvió Java
+            console.log("Paquete recibido de Java tras registrar:", datos);
 
-                if (respuesta.ok) {
+            // 2. EXTRAEMOS EL ID: Por si Java lo ha llamado 'id' en lugar de 'idUsuario'
+            const idRescatado = datos.idUsuario || datos.id; 
 
-                    return respuesta.json();
+            // 3. GUARDAMOS Y AVISAMOS
+            localStorage.setItem("idUsuario", idRescatado);
+            alert("¡Detective registrado con éxito! Tu ID asignado es el: " + idRescatado);
 
-                } else {
-
-
-                    throw new Error("Error al tratar los datos");
-                    
-                }
-            
-
-            })
-
-            .then( datos =>  {
-
-                localStorage.setItem("idUsuario",datos.idUsuario);
-                window.location.href = "preferencias.html";
-
-            })
-
-            .catch(error => {
-
-                console.error("Error crítico de conexión:", error);
-            });
-
-
+            // 4. REDIRECCIÓN CORRECTA: Ahora vamos a la pantalla de plataformas
+            window.location.href = "plataformas.html";
+        })
+        .catch(error => {
+            // Si algo falla, lo mostramos en un alert para que no pase desapercibido
+            console.error("Error crítico de conexión:", error);
+            alert("Hubo un fallo en el registro. Mira la consola (F12).");
+        });
 
     } else {
 
