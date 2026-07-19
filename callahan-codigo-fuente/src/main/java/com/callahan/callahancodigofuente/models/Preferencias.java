@@ -28,14 +28,19 @@ public class Preferencias {
 
 
     @ElementCollection
-    private List<String> generosFavoritos;
+    private List<Integer> generosFavoritos;
 
 
     @ElementCollection
-    private List<String> generosVetados;
+    private List<Integer> generosVetados;
 
-    private String epocaCinematograficaFav;
-    private String toleranciaALaDuracion;
+
+
+
+    @Enumerated(EnumType.STRING)
+    private EpocasPeliculas epocapelicula;
+
+    private double toleranciaALaDuracion;
 
     @ElementCollection
     private Set<String> plataformasContratadas;

@@ -4,6 +4,7 @@ import com.callahan.callahancodigofuente.dtos.ProcesamientoPreferenciasDTO;
 import com.callahan.callahancodigofuente.models.Preferencias;
 import com.callahan.callahancodigofuente.service.PreferenciasService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,12 +23,18 @@ public class PreferenciasController {
     @PostMapping("/procesamientoDatos")
     public ResponseEntity<Void> procesarDatos(@RequestBody ProcesamientoPreferenciasDTO datosCrudos){
 
-    List <Map.Entry<Integer, Integer>> datosTratados = preferenciasService.procesarDatosCrudos(datosCrudos);
+        try {
+            preferenciasService.procesarDatosCrudos(datosCrudos);
 
+            return ResponseEntity.ok().build();
 
-        return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            System.err.println("Error crítico guardando las preferencias del detective: " + e.getMessage());
+            e.printStackTrace();
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
-
 
 
 }

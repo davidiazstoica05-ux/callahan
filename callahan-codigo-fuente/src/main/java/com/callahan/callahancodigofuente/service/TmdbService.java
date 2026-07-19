@@ -43,7 +43,7 @@ public class TmdbService {
     public String obtenerPorId(int id){
 
 
-      String urlCompleta = apiUrl + "/movie/" + id + "?api_key=" + apiKey + "&language=es-ES";
+      String urlCompleta = apiUrl + "/movie/" + id + "?api_key=" + apiKey + "&language=es-ES&append_to_response=credits";
 
       RestTemplate restTemplate = new RestTemplate();
 

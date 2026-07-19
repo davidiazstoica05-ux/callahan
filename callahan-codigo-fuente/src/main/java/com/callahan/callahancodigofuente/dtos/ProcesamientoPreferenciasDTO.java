@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -22,8 +23,16 @@ import java.util.List;
 //la tiene el backend se vuelve loco y no sabra donde meter lo que le llega
 public class ProcesamientoPreferenciasDTO {
 
-    List<Integer> PeliculasGustadas;
-    List<Integer> PeliculasNoGustadas;
+
+    Long id;
+    List<Integer> peliculasGustadas;
+    List<Integer> peliculasNoGustadas;
+    List<Integer> directoresOdiados;
+    List<Integer> directoresFav;
+    List<String> aniosGustados;
+    List<String> aniosDescartes;
+    List<Double> duracionPeliculasgustadas;
+    Set<String> plataformasContratadas;
 
 
 

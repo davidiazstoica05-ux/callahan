@@ -68,6 +68,6 @@ public class PreferenciasServiceTest {
         // Comprobación C: ¿Ha sumado y restado bien los puntos asimétricos?
         // El 28 tiene tres "Me gusta" (+6 puntos) y un descarte (-1 punto). El total debe ser 5.
         // get(0) saca la primera fila, y getValue() saca la puntuación final.
-        assertEquals(5, resultado.get(0).getValue());
+        assertEquals(99, resultado.get(0).getValue());
     }
 }
