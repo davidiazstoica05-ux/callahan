@@ -1,6 +1,5 @@
 package com.callahan.callahancodigofuente.service;
 
-import com.callahan.callahancodigofuente.dtos.Peliculas;
 import com.callahan.callahancodigofuente.dtos.ProcesamientoPreferenciasDTO;
 import com.callahan.callahancodigofuente.models.EpocasPeliculas;
 import com.callahan.callahancodigofuente.models.Preferencias;
@@ -11,7 +10,6 @@ import com.callahan.callahancodigofuente.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.*;
 

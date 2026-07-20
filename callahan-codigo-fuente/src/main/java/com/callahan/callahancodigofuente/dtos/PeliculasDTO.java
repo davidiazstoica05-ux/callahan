@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 @Data
@@ -15,13 +16,15 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class Peliculas implements Serializable {
+public class PeliculasDTO implements Serializable {
 
     private Long id;
 
     @JsonProperty("poster_path")
     private String posterPath;
 
+    @JsonProperty("genre_ids")
+    private List<Integer> genreIds;
 
     private String title;
 

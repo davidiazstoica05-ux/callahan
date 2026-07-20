@@ -55,7 +55,12 @@ formularioEmociones.addEventListener('submit', (event) => {
 
     console.log("El usuario quiere ver una película con estas emociones:", emocionesSeleccionadas);
 
-    const paqueteDatos = { emociones: emocionesSeleccionadas };
+    const paqueteDatos = { 
+            
+        emociones: emocionesSeleccionadas,
+        idUsuario : localStorage.getItem('idUsuario')
+
+        }
 
     fetch('http://localhost:8080/api/callahan/recomendar', {
         method: 'POST',
