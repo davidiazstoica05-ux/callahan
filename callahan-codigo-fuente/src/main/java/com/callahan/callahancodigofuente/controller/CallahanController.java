@@ -25,10 +25,10 @@ public class CallahanController {
 
     private final EstadoAnimicoService estadoAnimicoService;
     private final UsuarioService usuarioService;
-    private  final TmdbService tmdbService;
+    private final TmdbService tmdbService;
     private final UsuarioRepository usuarioRepository;
 
-
+/*
     @PostMapping("/recomendar")
     public List<PeliculasDTO> recibirDatosEmociones(@RequestBody FiltroEmocionesDTO peticion) {
 
@@ -37,30 +37,27 @@ public class CallahanController {
         List<PeliculasDTO> peliculasPorGenero = new ArrayList<>();
         Long idUsuario = peticion.getIdUsuario();
 
-        Optional<Usuario> usuarioActual= usuarioRepository.findById(idUsuario);
-
+        Optional<Usuario> usuarioActual = usuarioRepository.findById(idUsuario);
 
 
         estadoAnimicoService.agregarEstadoAnimico(peticion, usuarioActual.get());
 
         generosEnString = transformarGenerosEnString(peticion);
 
-         peliculasPorGenero = tmdbService.obtenerPeliculasPorGenero(generosEnString);
+        peliculasPorGenero = tmdbService.obtenerPeliculasPorGenero(generosEnString);
 
-    };
-
-
+    }*/;
 
 
     //Metodo encapsulado
     //Transforma los generos que llegan en map a string
-    private String transformarGenerosEnString(FiltroEmocionesDTO peticion){
+    private String transformarGenerosEnString(FiltroEmocionesDTO peticion) {
 
         Set<IntencionDiaria> emociones = new HashSet<>(peticion.getEmociones());
         Set<Integer> generos = new HashSet<>();
 
 
-        for ( IntencionDiaria emocion : emociones){
+        for (IntencionDiaria emocion : emociones) {
 
             generos.addAll(emocion.getGenerosAsociados());
 
@@ -71,17 +68,20 @@ public class CallahanController {
                 .collect(Collectors.joining(","));
 
 
-    };
+    }
+
+    ;
 
     @GetMapping("/expedientes/{id}")
     @CrossOrigin
-    public String obtenerPelicula(@PathVariable int id){
+    public String obtenerPelicula(@PathVariable Long id) {
 
         return tmdbService.obtenerPorId(id);
 
 
+    }
 
-    };
+    ;
 
 }
 

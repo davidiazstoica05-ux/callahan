@@ -15,15 +15,11 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class PreferenciasService  extends BaseService <Preferencias, Long, PreferenciasRepository> {
+public class PreferenciasService extends BaseService<Preferencias, Long, PreferenciasRepository> {
 
     private final UsuarioRepository usuarioRepository;
 
     public void procesarDatosCrudos(@RequestBody ProcesamientoPreferenciasDTO datosCrudos) {
-
-        // 1. EL CHIVATO: Imprimimos exactamente lo que JavaScript nos acaba de mandar
-        System.out.println("===== DEBUG DETECTIVE =====");
-        System.out.println("El DTO ha recibido el ID: " + datosCrudos.getId());
 
 
         //Listas para luego construir el perfil de preferencias.++
@@ -53,8 +49,8 @@ public class PreferenciasService  extends BaseService <Preferencias, Long, Prefe
         //Usaremos genericos al tener un enum
         //CalcularPuntuaciones
         List<Map.Entry<Integer, Integer>> rankingGeneros = calcularPuntuaciones(
-                datosCrudos.getPeliculasGustadas(),
-                datosCrudos.getPeliculasNoGustadas()
+                datosCrudos.getGenerosGustados(),
+                datosCrudos.getGenerosNoGustados()
         );
 
         List<Map.Entry<Integer, Integer>> rankingDirectores = calcularPuntuaciones(
@@ -62,7 +58,7 @@ public class PreferenciasService  extends BaseService <Preferencias, Long, Prefe
                 datosCrudos.getDirectoresOdiados()
         );
 
-        List<Map.Entry<EpocasPeliculas,Integer>> rankingEpocas = calcularPuntuaciones(
+        List<Map.Entry<EpocasPeliculas, Integer>> rankingEpocas = calcularPuntuaciones(
                 transformarAEnum(datosCrudos.getAniosGustados()),
                 transformarAEnum(datosCrudos.getAniosDescartes())
         );
@@ -88,7 +84,7 @@ public class PreferenciasService  extends BaseService <Preferencias, Long, Prefe
         }
 
 
-            Preferencias preferencias = Preferencias.builder().
+        Preferencias preferencias = Preferencias.builder().
                 usuario(usuarioRepository.findUsuarioByIdUsuario(datosCrudos.getId()))
                 .idDirectorFav(directorFav)
                 .idDirectorOdiado(directorOdiado)
@@ -105,8 +101,8 @@ public class PreferenciasService  extends BaseService <Preferencias, Long, Prefe
 
     //Motor del calculo
     //Genericos para poder reutilizar el metodo con el enum
-    private <T> List<Map.Entry< T, Integer>> calcularPuntuaciones(List<T> elementosGustados,
-                                                                  List<T> elementosDescartados) {
+    private <T> List<Map.Entry<T, Integer>> calcularPuntuaciones(List<T> elementosGustados,
+                                                                 List<T> elementosDescartados) {
         Map<T, Integer> diccionario = new HashMap<>();
         int puntosMeGusta = 2;
         int puntosDescarte = -1;
@@ -162,13 +158,13 @@ public class PreferenciasService  extends BaseService <Preferencias, Long, Prefe
     }
 
 
-    private  List <EpocasPeliculas> transformarAEnum(List<String> aniosLanzamientos){
+    private List<EpocasPeliculas> transformarAEnum(List<String> aniosLanzamientos) {
 
         List<EpocasPeliculas> epocasPeliculas = new ArrayList<>();
 
-        if (aniosLanzamientos != null && !aniosLanzamientos.isEmpty()){
+        if (aniosLanzamientos != null && !aniosLanzamientos.isEmpty()) {
 
-            for (String anio : aniosLanzamientos){
+            for (String anio : aniosLanzamientos) {
 
                 int anioLanzamiento = Integer.parseInt(anio);
 
@@ -180,19 +176,19 @@ public class PreferenciasService  extends BaseService <Preferencias, Long, Prefe
 
         }
 
-        return  epocasPeliculas;
+        return epocasPeliculas;
 
     }
 
 
-    private double calcularMediaDuracionPeliculas(List<Double> duracionPeliculasGustadas){
+    private double calcularMediaDuracionPeliculas(List<Double> duracionPeliculasGustadas) {
 
         double duracionTotal = 0;
         double colchon = 1.15;
 
-        if ( duracionPeliculasGustadas != null && !duracionPeliculasGustadas.isEmpty()){
+        if (duracionPeliculasGustadas != null && !duracionPeliculasGustadas.isEmpty()) {
 
-            for (double duracionPelicula: duracionPeliculasGustadas){
+            for (double duracionPelicula : duracionPeliculasGustadas) {
 
 
                 duracionTotal += duracionPelicula;
@@ -200,7 +196,7 @@ public class PreferenciasService  extends BaseService <Preferencias, Long, Prefe
             }
 
             //Se hace para que el algoritmo tenga un poco de margen real a la hora de filtrar pelís
-            duracionTotal /= duracionPeliculasGustadas.size()  * colchon;
+            duracionTotal /= duracionPeliculasGustadas.size() * colchon;
 
 
         }
