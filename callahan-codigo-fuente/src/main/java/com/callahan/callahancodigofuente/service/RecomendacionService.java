@@ -1,6 +1,9 @@
 package com.callahan.callahancodigofuente.service;
 
+import com.callahan.callahancodigofuente.dtos.CrewDTO;
+import com.callahan.callahancodigofuente.dtos.PeliculaDetalleDTO;
 import com.callahan.callahancodigofuente.dtos.PeliculasDTO;
+import com.callahan.callahancodigofuente.models.EpocasPeliculas;
 import com.callahan.callahancodigofuente.models.Preferencias;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,11 +21,29 @@ RecomendacionService {
 
     private final TmdbService tmdbService;
 
-
-    public void recomendarPeliculas(List<PeliculasDTO> peliculas, Preferencias preferenciasUsuario) {
+    public List<PeliculasDTO> recomendarPeliculas(List<PeliculasDTO> peliculas, Preferencias preferenciasUsuario) {
 
         List<PeliculasDTO> surpervivientes = new ArrayList<>();
-        List<PeliculasDTO> recomendacionesFinale = new ArrayList<>();
+        List<PeliculasDTO> recomendacionesFinal = new ArrayList<>();
+
+        List<CrewDTO> crew;
+
+        PeliculaDetalleDTO detalle;
+
+        String fechaCompleta;
+
+        EpocasPeliculas epocaPelicula;
+
+        int anioEstreno;
+        int duracion;
+        Long idDirectorPeli;
+
+        CrewDTO director;
+
+        boolean duracionValida;
+        boolean directorValido;
+        boolean epocaValida;
+
 
         for (PeliculasDTO peli : peliculas) {
 
@@ -36,63 +57,80 @@ RecomendacionService {
                         surpervivientes.add(peli);
                     }
 
-
                 }
 
 
             }
 
 
-        }
+            for (PeliculasDTO superviviente : surpervivientes) {
 
-        for (PeliculasDTO peliSupervivientes : surpervivientes) {
+                evaluarSuperviviente(superviviente, preferenciasUsuario, recomendacionesFinal);
 
-            //obtenerPorId devuelve un JSON, por lo tanto necesitamos traducirlo. Hay dos opciones: -Hacer diferetenesDTOS
-            //O usar objectMapper que es un herramienta para arrancar directamente los datos
-            ObjectMapper mapper = new ObjectMapper();
-
-            try {
-                String respuestaTMDb = tmdbService.obtenerPorId(peliSupervivientes.getId());
-                // 3. Convertimos ese texto crudo en un "árbol" por el que podemos navegar
-                JsonNode nodoRaiz = mapper.readTree(respuestaTMDb);
-
-                // =========================================
-                // EXTRACCIÓN 1: La duración (runtime)
-                // =========================================
-                // Es un dato directo en la raíz. Le pedimos que nos lo dé como número (int)
-                // El '0' entre paréntesis es un salvavidas: si la película no tiene duración registrada, devolverá 0 en lugar de romper el programa.
-                int duracion = nodoRaiz.path("runtime").asInt(0);
-
-
-                // =========================================
-                // EXTRACCIÓN 2: El Director
-                // =========================================
-                // El director es más escurridizo. Está dentro del nodo "credits", que a su vez tiene una lista llamada "crew".
-                JsonNode equipoTecnico = nodoRaiz.path("credits").path("crew");
-
-                Long idDirector = null;
-
-                // Como "crew" es una lista (un array de JSON), tenemos que iterarla
-                if (equipoTecnico.isArray()) {
-                    for (JsonNode miembro : equipoTecnico) {
-                        // Buscamos específicamente a la persona que tiene el trabajo de "Director"
-                        if ("Director".equals(miembro.path("job").asText())) {
-                            // Cuando lo encontramos, extraemos su ID y rompemos el bucle
-                            idDirector = miembro.path("id").asLong();
-                            break;
-                        }
-                    }
-                }
-
-
-            } catch (Exception e) {
-                System.err.println("Error procesando el JSON profundo de la película: " + e.getMessage());
             }
 
         }
 
+        return recomendacionesFinal;
 
     }
 
 
+    //Hice toda esta parte yo solo y gemini se encargo de añadir seguridad y limpiar un poco el codigo
+    private void evaluarSuperviviente(PeliculasDTO superviviente, Preferencias
+            preferenciasUsuario, List<PeliculasDTO> recomendacionesFinal) {
+
+        EpocasPeliculas epocaPelicula = null;
+        boolean directorValido = true;
+        boolean epocaValida = true;
+
+        PeliculaDetalleDTO detalle = tmdbService.obtenerPorId(superviviente.getId());
+        String fechaCompleta = detalle.getReleaseDate().getReleaseDate();
+        int duracion = detalle.getRuntime();
+        List<CrewDTO> crew = detalle.getCredits().getCrew();
+
+        if (fechaCompleta != null && fechaCompleta.length() >= 4) {
+            int anioEstreno = Integer.parseInt(fechaCompleta.substring(0, 4));
+            epocaPelicula = EpocasPeliculas.obtenerEpoca(anioEstreno);
+        }
+
+        CrewDTO director = crew.stream()
+                .filter(p -> "Director".equals(p.getJob()))
+                .findFirst()
+                .orElse(null);
+
+        Long idDirectorPeli;
+        if (director != null) {
+            idDirectorPeli = director.getId();
+        } else {
+            idDirectorPeli = null;
+        }
+
+        boolean duracionValida = duracion <= preferenciasUsuario.getToleranciaALaDuracion();
+
+        if (idDirectorPeli != null && preferenciasUsuario.getIdDirectorOdiado() != null) {
+            if (idDirectorPeli.equals(preferenciasUsuario.getIdDirectorOdiado())) {
+                directorValido = false;
+            }
+        }
+
+        if (preferenciasUsuario.getEpocapelicula() != null && epocaPelicula != null) {
+            if (epocaPelicula != preferenciasUsuario.getEpocapelicula()) {
+                epocaValida = false;
+            }
+        }
+
+        // Si pasa todas las pruebas, la añadimos a la lista que nos han pasado por parámetro
+        if (duracionValida && directorValido && epocaValida) {
+            if (idDirectorPeli != null && idDirectorPeli.equals(preferenciasUsuario.getIdDirectorFav())) {
+                recomendacionesFinal.add(0, superviviente);
+            } else {
+                recomendacionesFinal.add(superviviente);
+            }
+        }
+    }
 }
+
+
+
+

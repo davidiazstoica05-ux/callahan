@@ -1,6 +1,7 @@
 package com.callahan.callahancodigofuente.service;
 
 
+import com.callahan.callahancodigofuente.dtos.PeliculaDetalleDTO;
 import com.callahan.callahancodigofuente.dtos.PeliculasDTO;
 import com.callahan.callahancodigofuente.dtos.RespuestaTmdbDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,17 +34,25 @@ public class TmdbService {
 
     }
 
-    public String obtenerPorId(Long id){
+    public PeliculaDetalleDTO obtenerPorId(Long id) {
 
 
-      String urlCompleta = apiUrl + "/movie/" + id + "?api_key=" + apiKey + "&language=es-ES&append_to_response=credits";
+        String urlCompleta = apiUrl + "/movie/" + id + "?api_key=" + apiKey + "&language=es-ES&append_to_response=credits";
 
-      RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
 
-      String respuestaString = restTemplate.getForObject(urlCompleta , String.class);
+        PeliculaDetalleDTO respuesta = restTemplate.getForObject(urlCompleta, PeliculaDetalleDTO.class);
 
-      return  respuestaString;
+        return respuesta;
 
+    }
+
+    public String obtenerExpedienteCrudo(Long id) {
+        String urlCompleta = apiUrl + "/movie/" + id + "?api_key=" + apiKey + "&language=es-ES&append_to_response=credits";
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Fíjate que aquí le pedimos a Spring que nos lo devuelva como String.class
+        return restTemplate.getForObject(urlCompleta, String.class);
     }
 
 

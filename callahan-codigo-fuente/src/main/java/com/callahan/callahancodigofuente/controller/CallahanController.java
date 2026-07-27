@@ -2,11 +2,15 @@ package com.callahan.callahancodigofuente.controller;
 
 
 import com.callahan.callahancodigofuente.dtos.FiltroEmocionesDTO;
+import com.callahan.callahancodigofuente.dtos.PeliculaDetalleDTO;
 import com.callahan.callahancodigofuente.dtos.PeliculasDTO;
 import com.callahan.callahancodigofuente.models.IntencionDiaria;
+import com.callahan.callahancodigofuente.models.Preferencias;
 import com.callahan.callahancodigofuente.models.Usuario;
+import com.callahan.callahancodigofuente.repository.PreferenciasRepository;
 import com.callahan.callahancodigofuente.repository.UsuarioRepository;
 import com.callahan.callahancodigofuente.service.EstadoAnimicoService;
+import com.callahan.callahancodigofuente.service.RecomendacionService;
 import com.callahan.callahancodigofuente.service.TmdbService;
 import com.callahan.callahancodigofuente.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -24,20 +28,28 @@ public class CallahanController {
 
 
     private final EstadoAnimicoService estadoAnimicoService;
-    private final UsuarioService usuarioService;
     private final TmdbService tmdbService;
     private final UsuarioRepository usuarioRepository;
+    private final RecomendacionService recomendacionService;
+    private final PreferenciasRepository preferenciasRepository;
 
-/*
+
     @PostMapping("/recomendar")
     public List<PeliculasDTO> recibirDatosEmociones(@RequestBody FiltroEmocionesDTO peticion) {
 
 
         String generosEnString;
+
         List<PeliculasDTO> peliculasPorGenero = new ArrayList<>();
+
         Long idUsuario = peticion.getIdUsuario();
 
+        Preferencias preferenciasUsuario;
+
         Optional<Usuario> usuarioActual = usuarioRepository.findById(idUsuario);
+
+
+        preferenciasUsuario = preferenciasRepository.getReferenceById(idUsuario);
 
 
         estadoAnimicoService.agregarEstadoAnimico(peticion, usuarioActual.get());
@@ -46,7 +58,10 @@ public class CallahanController {
 
         peliculasPorGenero = tmdbService.obtenerPeliculasPorGenero(generosEnString);
 
-    }*/;
+
+        return recomendacionService.recomendarPeliculas(peliculasPorGenero, preferenciasUsuario);
+
+    }
 
 
     //Metodo encapsulado
@@ -70,18 +85,14 @@ public class CallahanController {
 
     }
 
-    ;
 
     @GetMapping("/expedientes/{id}")
     @CrossOrigin
+    // Ahora sí devolvemos el texto puro (JSON) al JavaScript
     public String obtenerPelicula(@PathVariable Long id) {
-
-        return tmdbService.obtenerPorId(id);
-
-
+        return tmdbService.obtenerExpedienteCrudo(id);
     }
 
-    ;
 
 }
 
