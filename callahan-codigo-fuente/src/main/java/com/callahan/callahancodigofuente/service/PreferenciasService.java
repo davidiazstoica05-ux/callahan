@@ -32,7 +32,7 @@ public class PreferenciasService extends BaseService<Preferencias, Long, Prefere
         double tolerancia;
 
         Usuario detective = usuarioRepository.findById(datosCrudos.getId()).orElse(null);
-        
+
         // Se cambian a Long (clase envoltorio) en lugar de int (primitivo)
         // para que puedan ser null si las listas vienen vacías, y coincidir con la entidad Preferencias.
         Long directorFav = null;
@@ -175,27 +175,20 @@ public class PreferenciasService extends BaseService<Preferencias, Long, Prefere
 
 
     private double calcularMediaDuracionPeliculas(List<Double> duracionPeliculasGustadas) {
-
         double duracionTotal = 0;
         double colchon = 1.15;
 
         if (duracionPeliculasGustadas != null && !duracionPeliculasGustadas.isEmpty()) {
-
             for (double duracionPelicula : duracionPeliculasGustadas) {
-
-
                 duracionTotal += duracionPelicula;
-
             }
 
-            //Se hace para que el algoritmo tenga un poco de margen real a la hora de filtrar pelís
-            duracionTotal /= duracionPeliculasGustadas.size() * colchon;
+            duracionTotal = (duracionTotal / duracionPeliculasGustadas.size()) * colchon;
 
-
+        } else {
+            return 300;
         }
-
         return duracionTotal;
-
     }
 
 

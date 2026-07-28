@@ -22,70 +22,40 @@ RecomendacionService {
     private final TmdbService tmdbService;
 
     public List<PeliculasDTO> recomendarPeliculas(List<PeliculasDTO> peliculas, Preferencias preferenciasUsuario) {
-
-        List<PeliculasDTO> surpervivientes = new ArrayList<>();
         List<PeliculasDTO> recomendacionesFinal = new ArrayList<>();
 
-        List<CrewDTO> crew;
-
-        PeliculaDetalleDTO detalle;
-
-        String fechaCompleta;
-
-        EpocasPeliculas epocaPelicula;
-
-        int anioEstreno;
-        int duracion;
-        Long idDirectorPeli;
-
-        CrewDTO director;
-
-        boolean duracionValida;
-        boolean directorValido;
-        boolean epocaValida;
-
-
         for (PeliculasDTO peli : peliculas) {
+            boolean estaVetada = false;
 
-            for (int generoVetado : preferenciasUsuario.getGenerosVetados()) {
-
-
-                for (int idGeneros : peli.getGenreIds()) {
-
-                    if (idGeneros != generoVetado) {
-
-                        surpervivientes.add(peli);
+            // 1. Solo comprobamos los géneros si el usuario realmente tiene géneros vetados guardados
+            if (preferenciasUsuario.getGenerosVetados() != null && !preferenciasUsuario.getGenerosVetados().isEmpty()) {
+                for (int idGenero : peli.getGenreIds()) {
+                    for (int generoVetado : preferenciasUsuario.getGenerosVetados()) {
+                        if (idGenero == generoVetado) {
+                            estaVetada = true; // ¡Alerta! Contiene un género prohibido
+                            break; // Rompemos el bucle porque ya sabemos que está vetada
+                        }
                     }
-
+                    if (estaVetada) break; // Salimos también del bucle exterior
                 }
-
-
             }
 
-
-            for (PeliculasDTO superviviente : surpervivientes) {
-
-                evaluarSuperviviente(superviviente, preferenciasUsuario, recomendacionesFinal);
-
+            // 2. Si ha superado el filtro de géneros (o si no tenía géneros vetados), pasa al interrogatorio
+            if (!estaVetada) {
+                evaluarSuperviviente(peli, preferenciasUsuario, recomendacionesFinal);
             }
-
         }
 
         return recomendacionesFinal;
-
     }
 
 
-    //Hice toda esta parte yo solo y gemini se encargo de añadir seguridad y limpiar un poco el codigo
-    private void evaluarSuperviviente(PeliculasDTO superviviente, Preferencias
-            preferenciasUsuario, List<PeliculasDTO> recomendacionesFinal) {
-
+    private void evaluarSuperviviente(PeliculasDTO superviviente, Preferencias preferenciasUsuario, List<PeliculasDTO> recomendacionesFinal) {
         EpocasPeliculas epocaPelicula = null;
         boolean directorValido = true;
-        boolean epocaValida = true;
 
         PeliculaDetalleDTO detalle = tmdbService.obtenerPorId(superviviente.getId());
-        String fechaCompleta = detalle.getReleaseDate().getReleaseDate();
+        String fechaCompleta = detalle.getReleaseDate();
         int duracion = detalle.getRuntime();
         List<CrewDTO> crew = detalle.getCredits().getCrew();
 
@@ -99,30 +69,27 @@ RecomendacionService {
                 .findFirst()
                 .orElse(null);
 
-        Long idDirectorPeli;
-        if (director != null) {
-            idDirectorPeli = director.getId();
-        } else {
-            idDirectorPeli = null;
-        }
+        Long idDirectorPeli = (director != null) ? director.getId() : null;
 
+        // 1. Filtro estricto: Duración
         boolean duracionValida = duracion <= preferenciasUsuario.getToleranciaALaDuracion();
 
+        // 2. Filtro estricto: Director odiado
         if (idDirectorPeli != null && preferenciasUsuario.getIdDirectorOdiado() != null) {
             if (idDirectorPeli.equals(preferenciasUsuario.getIdDirectorOdiado())) {
                 directorValido = false;
             }
         }
 
-        if (preferenciasUsuario.getEpocapelicula() != null && epocaPelicula != null) {
-            if (epocaPelicula != preferenciasUsuario.getEpocapelicula()) {
-                epocaValida = false;
-            }
-        }
+        // 3. Veredicto y Recompensas (Puntos extra)
+        if (duracionValida && directorValido) {
 
-        // Si pasa todas las pruebas, la añadimos a la lista que nos han pasado por parámetro
-        if (duracionValida && directorValido && epocaValida) {
-            if (idDirectorPeli != null && idDirectorPeli.equals(preferenciasUsuario.getIdDirectorFav())) {
+            // Evaluamos los puntos extra
+            boolean esDirectorFav = idDirectorPeli != null && idDirectorPeli.equals(preferenciasUsuario.getIdDirectorFav());
+            boolean esEpocaFav = preferenciasUsuario.getEpocapelicula() != null && epocaPelicula == preferenciasUsuario.getEpocapelicula();
+
+            // Si es de su época favorita O de su director favorito, le damos prioridad absoluta
+            if (esDirectorFav || esEpocaFav) {
                 recomendacionesFinal.add(0, superviviente);
             } else {
                 recomendacionesFinal.add(superviviente);

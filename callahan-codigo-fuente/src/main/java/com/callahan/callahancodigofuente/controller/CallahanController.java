@@ -80,7 +80,7 @@ public class CallahanController {
 
         return generos.stream()
                 .map(String::valueOf)
-                .collect(Collectors.joining(","));
+                .collect(Collectors.joining("|"));
 
 
     }

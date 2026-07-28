@@ -1,6 +1,7 @@
 package com.callahan.callahancodigofuente.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,8 @@ public class PeliculaDetalleDTO {
 
     private int runtime;
     private CreditsDTO credits;
-    private releaseDateDTO releaseDate;
-
+    
+    @JsonProperty("release_date")
+    private String releaseDate;
 
 }
