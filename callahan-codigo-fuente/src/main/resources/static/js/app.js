@@ -38,6 +38,29 @@ emociones.forEach(emocion => {
 });
 
 
+
+
+
+const btnVolver = document.getElementById("btn-volver");
+
+const btnVolver = document.getElementById("btn-volver");
+
+btnVolver.addEventListener('click', (event) => {
+    const pantallaResultados = document.getElementById("pantalla-resultados");
+    const pantallaForm = document.getElementById("pantalla-interrogatorio");
+
+    pantallaResultados.classList.add('oculto');
+    pantallaForm.classList.remove('oculto');
+
+    const emociones = document.querySelectorAll('.checkbox-emocion');
+    emociones.forEach(caja => {
+        caja.checked = false;
+        caja.disabled = false;
+    });
+
+    document.getElementById("zona-peliculas").innerHTML = '';
+}); // <--- ¡ESTA ES LA LÍNEA QUE TE FALTA! 🚨
+
 const formularioEmociones = document.getElementById('formulario-emociones');
 
 
@@ -55,7 +78,12 @@ formularioEmociones.addEventListener('submit', (event) => {
 
     console.log("El usuario quiere ver una película con estas emociones:", emocionesSeleccionadas);
 
-    const paqueteDatos = { emociones: emocionesSeleccionadas };
+    const paqueteDatos = {
+
+        emociones: emocionesSeleccionadas,
+        idUsuario: localStorage.getItem('idUsuario')
+
+    }
 
     fetch('http://localhost:8080/api/callahan/recomendar', {
         method: 'POST',
@@ -65,7 +93,7 @@ formularioEmociones.addEventListener('submit', (event) => {
         body: JSON.stringify(paqueteDatos)
     })
         .then(respuesta => respuesta.json())
-          .then(datos => {
+        .then(datos => {
             // 1. Capturamos los elementos de la pantalla
             const pantallaForm = document.getElementById("pantalla-interrogatorio");
             const pantallaResultados = document.getElementById("pantalla-resultados");
@@ -97,7 +125,7 @@ formularioEmociones.addEventListener('submit', (event) => {
                 `;
             });
         })
-            .catch(error => console.error("Error en el envío:", error));
+        .catch(error => console.error("Error en el envío:", error));
 
 });
 

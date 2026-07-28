@@ -2,20 +2,21 @@ package com.callahan.callahancodigofuente.controller;
 
 
 import com.callahan.callahancodigofuente.dtos.FiltroEmocionesDTO;
-import com.callahan.callahancodigofuente.dtos.Peliculas;
+import com.callahan.callahancodigofuente.dtos.PeliculaDetalleDTO;
+import com.callahan.callahancodigofuente.dtos.PeliculasDTO;
 import com.callahan.callahancodigofuente.models.IntencionDiaria;
+import com.callahan.callahancodigofuente.models.Preferencias;
 import com.callahan.callahancodigofuente.models.Usuario;
+import com.callahan.callahancodigofuente.repository.PreferenciasRepository;
 import com.callahan.callahancodigofuente.repository.UsuarioRepository;
 import com.callahan.callahancodigofuente.service.EstadoAnimicoService;
+import com.callahan.callahancodigofuente.service.RecomendacionService;
 import com.callahan.callahancodigofuente.service.TmdbService;
 import com.callahan.callahancodigofuente.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 //Devuelve datos puros en JSON, no una pagina
@@ -27,47 +28,51 @@ public class CallahanController {
 
 
     private final EstadoAnimicoService estadoAnimicoService;
-    private final UsuarioService usuarioService;
-    private  final TmdbService tmdbService;
+    private final TmdbService tmdbService;
+    private final UsuarioRepository usuarioRepository;
+    private final RecomendacionService recomendacionService;
+    private final PreferenciasRepository preferenciasRepository;
 
 
     @PostMapping("/recomendar")
-    public List<Peliculas> recibirDatosEmociones(@RequestBody FiltroEmocionesDTO peticion) {
+    public List<PeliculasDTO> recibirDatosEmociones(@RequestBody FiltroEmocionesDTO peticion) {
 
 
         String generosEnString;
 
+        List<PeliculasDTO> peliculasPorGenero = new ArrayList<>();
 
-        Usuario usuarioActual = usuarioService.findById(1L).orElseGet(() -> {
-            Usuario nuevoUsuario = Usuario.builder()
-                    .nombreUsuario("detective_callahan")
-                    .nombreReal("Harry")
-                    .apellido1("Callahan")
-                    .email("callahan@cinema.com")
-                    .build();
-            return usuarioService.save(nuevoUsuario);
-        });
+        Long idUsuario = peticion.getIdUsuario();
 
-        estadoAnimicoService.agregarEstadoAnimico(peticion, usuarioActual);
+        Preferencias preferenciasUsuario;
+
+        Optional<Usuario> usuarioActual = usuarioRepository.findById(idUsuario);
+
+
+        preferenciasUsuario = preferenciasRepository.getReferenceById(idUsuario);
+
+
+        estadoAnimicoService.agregarEstadoAnimico(peticion, usuarioActual.get());
 
         generosEnString = transformarGenerosEnString(peticion);
 
-        return tmdbService.obtenerPeliculasPorGenero(generosEnString);
+        peliculasPorGenero = tmdbService.obtenerPeliculasPorGenero(generosEnString);
+
+
+        return recomendacionService.recomendarPeliculas(peliculasPorGenero, preferenciasUsuario);
 
     }
 
 
-
-
     //Metodo encapsulado
     //Transforma los generos que llegan en map a string
-    private String transformarGenerosEnString(FiltroEmocionesDTO peticion){
+    private String transformarGenerosEnString(FiltroEmocionesDTO peticion) {
 
         Set<IntencionDiaria> emociones = new HashSet<>(peticion.getEmociones());
         Set<Integer> generos = new HashSet<>();
 
 
-        for ( IntencionDiaria emocion : emociones){
+        for (IntencionDiaria emocion : emociones) {
 
             generos.addAll(emocion.getGenerosAsociados());
 
@@ -75,20 +80,19 @@ public class CallahanController {
 
         return generos.stream()
                 .map(String::valueOf)
-                .collect(Collectors.joining(","));
+                .collect(Collectors.joining("|"));
 
 
     }
+
 
     @GetMapping("/expedientes/{id}")
     @CrossOrigin
-    public String obtenerPelicula(@PathVariable int id){
-
-        return tmdbService.obtenerPorId(id);
-
-
-
+    // Ahora sí devolvemos el texto puro (JSON) al JavaScript
+    public String obtenerPelicula(@PathVariable Long id) {
+        return tmdbService.obtenerExpedienteCrudo(id);
     }
+
 
 }
 

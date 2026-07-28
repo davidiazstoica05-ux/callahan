@@ -1,20 +1,15 @@
 package com.callahan.callahancodigofuente.service;
 
 
-import com.callahan.callahancodigofuente.dtos.FiltroEmocionesDTO;
-import com.callahan.callahancodigofuente.dtos.Peliculas;
+import com.callahan.callahancodigofuente.dtos.PeliculaDetalleDTO;
+import com.callahan.callahancodigofuente.dtos.PeliculasDTO;
 import com.callahan.callahancodigofuente.dtos.RespuestaTmdbDto;
-import com.callahan.callahancodigofuente.models.EstadoAnimico;
-import com.callahan.callahancodigofuente.models.IntencionDiaria;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class TmdbService {
@@ -26,31 +21,44 @@ public class TmdbService {
     private String apiUrl;
 
 
-    public List<Peliculas> obtenerPeliculasPorGenero(String idGenero) {
+    public List<PeliculasDTO> obtenerPeliculasPorGenero(String idGenero) {
+        List<PeliculasDTO> peliculasTotales = new ArrayList<>();
+        RestTemplate restTemplate = new RestTemplate();
 
-        //El & sirve para decirle a la url que además quieres aplicar otra regla
-        String urlFinal = apiUrl + "/discover/movie?api_key=" + apiKey + "&with_genres=" + idGenero + "&sort_by=vote_"
-                + "average.desc&vote_count.gte=500";
+        // Hacemos 3 peticiones rápidas (Páginas 1, 2 y 3)
+        for (int i = 1; i <= 3; i++) {
+            String urlFinal = apiUrl + "/discover/movie?api_key=" + apiKey
+                    + "&with_genres=" + idGenero
+                    + "&sort_by=vote_average.desc&vote_count.gte=500"
+                    + "&page=" + i; // Añadimos la paginación dinámica
+
+            RespuestaTmdbDto respuesta = restTemplate.getForObject(urlFinal, RespuestaTmdbDto.class);
+            if (respuesta != null && respuesta.getResults() != null) {
+                peliculasTotales.addAll(respuesta.getResults());
+            }
+        }
+        return peliculasTotales;
+    }
+
+    public PeliculaDetalleDTO obtenerPorId(Long id) {
+
+
+        String urlCompleta = apiUrl + "/movie/" + id + "?api_key=" + apiKey + "&language=es-ES&append_to_response=credits";
 
         RestTemplate restTemplate = new RestTemplate();
 
-        RespuestaTmdbDto respuesta = restTemplate.getForObject(urlFinal, RespuestaTmdbDto.class);
+        PeliculaDetalleDTO respuesta = restTemplate.getForObject(urlCompleta, PeliculaDetalleDTO.class);
 
-        return respuesta.getResults();
+        return respuesta;
 
     }
 
-    public String obtenerPorId(int id){
+    public String obtenerExpedienteCrudo(Long id) {
+        String urlCompleta = apiUrl + "/movie/" + id + "?api_key=" + apiKey + "&language=es-ES&append_to_response=credits";
+        RestTemplate restTemplate = new RestTemplate();
 
-
-      String urlCompleta = apiUrl + "/movie/" + id + "?api_key=" + apiKey + "&language=es-ES&append_to_response=credits";
-
-      RestTemplate restTemplate = new RestTemplate();
-
-      String respuestaString = restTemplate.getForObject(urlCompleta , String.class);
-
-      return  respuestaString;
-
+        // Fíjate que aquí le pedimos a Spring que nos lo devuelva como String.class
+        return restTemplate.getForObject(urlCompleta, String.class);
     }
 
 

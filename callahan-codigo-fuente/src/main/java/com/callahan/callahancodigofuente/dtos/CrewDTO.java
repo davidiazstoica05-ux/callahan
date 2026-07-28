@@ -1,34 +1,20 @@
 package com.callahan.callahancodigofuente.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
-
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class Peliculas implements Serializable {
+public class CrewDTO {
 
     private Long id;
-
-    @JsonProperty("poster_path")
-    private String posterPath;
-
-
-    private String title;
-
-    @JsonProperty("vote_average")
-    private Double voteAverage;
-
-    private String overview;
+    private String job;
 
 
 }

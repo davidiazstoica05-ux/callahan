@@ -26,16 +26,19 @@ let copiaBolsaPeliculas = [];
 let directoresGustados = [];
 let directoresOdiados = [];
 
-let aniosGustados = []; 
+let aniosGustados = [];
 let aniosDescartados = [];
 
 let peliculasGustadas = []; //Guarda las peliculas que le gustan al usuario 
-let peliculasNoGUstadas = [];
+let peliculasNoGustadas = [];
 
-let duracionPeliculasGustadas = []; 
+let generosGustados = [];
+let generosNoGustados = [];
+
+let duracionPeliculasGustadas = [];
 
 //Indica qué película está viendo el usuario en este momento.
-let indiceActual = 0; 
+let indiceActual = 0;
 
 
 // =====================================================================
@@ -54,11 +57,11 @@ function recorrerBolsas(bolsasPeliculas) {
 
         // Sacamos 3 películas por género para que el backend tenga margen de puntuación
         for (let i = 0; i < 3; i++) {
-            const rnd = Math.floor(Math.random() * bolsasPeliculas[bolsa].length); 
+            const rnd = Math.floor(Math.random() * bolsasPeliculas[bolsa].length);
             const idPelicula = bolsasPeliculas[bolsa][rnd];
-            
+
             barajaFinal.push(idPelicula);
-            
+
             //Borra la pelicula para que no vuelva a salir 
             bolsasPeliculas[bolsa].splice(rnd, 1);
         }
@@ -69,17 +72,17 @@ function evaluarPelicula(decision) {
     // EL ESCUDO: Si hacen clic rápido pero la descarga simultánea aún no ha terminado
     if (barajaPeliculas.length === 0 || !barajaPeliculas[indiceActual]) {
         console.warn("Calma, detective. El expediente aún se está descargando...");
-        return; 
+        return;
     }
 
-    const pelicula = barajaPeliculas[indiceActual]; 
+    const pelicula = barajaPeliculas[indiceActual];
 
     // =====================================
     //                 ACEPTAR
     // =====================================
     if (decision === "aceptar") {
         const crew = pelicula.credits.crew;
-        const director = crew.find(persona => persona.job === "Director"); 
+        const director = crew.find(persona => persona.job === "Director");
 
         if (director !== undefined) {
             const directorID = director.id;
@@ -89,29 +92,38 @@ function evaluarPelicula(decision) {
             console.log("No se encontraron datos del director para esta película.");
         }
 
-        const anioLanzamiento = pelicula.release_date; 
+        const anioLanzamiento = pelicula.release_date;
         if (anioLanzamiento != undefined) {
-            aniosGustados.push(anioLanzamiento.substring(0, 4)); 
-            console.log("Año de lanzamiento: " + anioLanzamiento.substring(0,4)); 
+            aniosGustados.push(anioLanzamiento.substring(0, 4));
+            console.log("Año de lanzamiento: " + anioLanzamiento.substring(0, 4));
         } else {
             console.log("No se encontro el año de lanzamiento");
         }
 
-        const duracionPelicula = pelicula.runtime; 
+        const duracionPelicula = pelicula.runtime;
         if (duracionPelicula != undefined) {
             duracionPeliculasGustadas.push(duracionPelicula);
             console.log("duracion de la pelicula: " + duracionPelicula);
         }
 
         peliculasGustadas.push(pelicula.id);
-        console.log("Peliculas gustadas: ", peliculasGustadas);
 
-    // =====================================
-    //                 DESCARTAR
-    // =====================================
+        pelicula.genres.forEach(genero => {
+
+            generosGustados.push(genero.id);
+
+        });
+
+
+        console.log("Peliculas gustadas: ", peliculasGustadas);
+        console.log("Generos gustados :" + generosGustados);
+
+        // =====================================
+        //                 DESCARTAR
+        // =====================================
     } else if (decision === "rechazar") {
         const crew = pelicula.credits.crew;
-        const director = crew.find(persona => persona.job === "Director"); 
+        const director = crew.find(persona => persona.job === "Director");
 
         if (director !== undefined) {
             const directorID = director.id;
@@ -123,19 +135,26 @@ function evaluarPelicula(decision) {
 
         const anioLanzamiento = pelicula.release_date;
         if (anioLanzamiento != null) {
-            aniosDescartados.push(anioLanzamiento.substring(0,4));
-            console.log("Año de lanzamiento descartado: " + anioLanzamiento.substring(0,4)); 
+            aniosDescartados.push(anioLanzamiento.substring(0, 4));
+            console.log("Año de lanzamiento descartado: " + anioLanzamiento.substring(0, 4));
         } else {
             console.log("No se encontro el año de lanzamiento");
         }
-        
-        peliculasNoGUstadas.push(pelicula.id);
-        console.log("Peliculas no gustadas :", peliculasNoGUstadas);
-    } 
 
-    indiceActual++; 
+        peliculasNoGustadas.push(pelicula.id);
+
+        pelicula.genres.forEach(genero => {
+            generosNoGustados.push(genero.id);
+        });
+
+        console.log("Peliculas no gustadas :", peliculasNoGustadas);
+        console.log("Generos no gustados: " + generosNoGustados);
+    }
+
+    indiceActual++;
     pintarTarjeta();
 }
+
 
 /**
  * Función asíncrona que hace peticiones HTTP a nuestro propio servidor Java.
@@ -144,18 +163,18 @@ function evaluarPelicula(decision) {
 async function descargarPosters() {
     try {
         // Preparamos las 21 peticiones a la vez
-        const promesas = barajaFinal.map(id => 
+        const promesas = barajaFinal.map(id =>
             fetch(`http://localhost:8080/api/callahan/expedientes/${id}`)
-            .then(res => res.json())
+                .then(res => res.json())
         );
-        
+
         // Promise.all lanza todas y "congela" el código hasta que todas acaban
         barajaPeliculas = await Promise.all(promesas);
         console.log("Expedientes descargados correctamente de golpe. Baraja lista:", barajaPeliculas);
-        
+
         // Empezamos a pintar cuando estamos 100% seguros de que todo bajó
         pintarTarjeta();
-        
+
     } catch (error) {
         console.error("Error crítico al solicitar los expedientes:", error);
     }
@@ -168,66 +187,66 @@ async function descargarPosters() {
 function pintarTarjeta() {
     // 1. Control de flujo: Si llegamos a la 21, cerramos el juego y enviamos a Java
     if (indiceActual === barajaFinal.length) {
-        
+
         console.log("Procesando datos finales. ID rescatado: ", localStorage.getItem("idUsuario"));
-        
+
         const paqueDatos = {
-            id : parseInt(localStorage.getItem("idUsuario")),
-            peliculasGustadas : peliculasGustadas, 
-            peliculasNoGustadas : peliculasNoGUstadas,
-            directoresOdiados : directoresOdiados,
-            directoresFav : directoresGustados,      
-            aniosDescartes : aniosDescartados, 
-            aniosGustados : aniosGustados,
-            duracionPeliculasgustadas : duracionPeliculasGustadas, 
-            plataformasContratadas : JSON.parse(localStorage.getItem("plataformasUsuario")) 
+            id: parseInt(localStorage.getItem("idUsuario")),
+            generosGustados: generosGustados,
+            generosNoGustados: generosNoGustados,
+            directoresOdiados: directoresOdiados,
+            directoresFav: directoresGustados,
+            aniosDescartes: aniosDescartados,
+            aniosGustados: aniosGustados,
+            duracionPeliculasgustadas: duracionPeliculasGustadas,
+            plataformasContratadas: JSON.parse(localStorage.getItem("plataformasUsuario"))
         };
 
         // Enviamos el paquete a Java
         fetch('http://localhost:8080/preferencias/procesamientoDatos', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json' 
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(paqueDatos)
         })
-        .then(respuesta => {
-            if (respuesta.ok) {
-                console.log("¡Perfil de detective calibrado y guardado con éxito!");
-                window.location.href = "mainPage.html"; 
-            } else {
-                throw new Error("El servidor rechazó el paquete de preferencias.");
-            }
-        })
-        .catch(error => {
-            console.error("Fallo de comunicación con la base de datos:", error);
-            alert("Ha ocurrido un error al guardar tu perfil. Revisa la consola.");
-        });
+            .then(respuesta => {
+                if (respuesta.ok) {
+                    console.log("¡Perfil de detective calibrado y guardado con éxito!");
+                    window.location.href = "mainPage.html";
+                } else {
+                    throw new Error("El servidor rechazó el paquete de preferencias.");
+                }
+            })
+            .catch(error => {
+                console.error("Fallo de comunicación con la base de datos:", error);
+                alert("Ha ocurrido un error al guardar tu perfil. Revisa la consola.");
+            });
 
         // Este return evita intentar pintar una tarjeta que no existe
-        return; 
+        return;
     }
 
     // --- Si aún quedan películas por evaluar, pintamos la siguiente tarjeta ---
     const pelicula = barajaPeliculas[indiceActual];
-    
-    const tituloDOM = document.getElementById("titulo-pelicula"); 
+
+    const tituloDOM = document.getElementById("titulo-pelicula");
     const textoDOM = document.getElementById("director-pelicula");
     const posterDOM = document.getElementById("poster-pelicula");
-    
+
     tituloDOM.textContent = pelicula.title;
-    
+
     // Validamos la fecha para no intentar cortar algo indefinido
     const fecha = pelicula.release_date || "Desconocido";
     textoDOM.textContent = "Año de estreno: " + fecha.substring(0, 4);
-    
+
     const urlBaseTMDb = "https://image.tmdb.org/t/p/w500";
     // Si no tiene poster, ponemos uno por defecto para que no se rompa la vista
     const rutaImagen = pelicula.poster_path ? urlBaseTMDb + pelicula.poster_path : 'https://via.placeholder.com/500x750/111111/F5F2EB?text=Sin+Pruebas';
     posterDOM.src = rutaImagen;
-    
+
     posterDOM.classList.add("animacion-entrada");
-    
+
     setTimeout(() => {
         posterDOM.classList.remove("animacion-entrada");
     }, 500);
@@ -249,7 +268,7 @@ descargarPosters();
 // ZONA 4: BOTONES Y EVENTOS
 // =====================================================================
 
-const btnMeGusta = document.getElementById("btn-gustar"); 
+const btnMeGusta = document.getElementById("btn-gustar");
 const btnDescartar = document.getElementById("btn-rechazar");
 const btnIgnorar = document.getElementById("btn-ignorar");
 
