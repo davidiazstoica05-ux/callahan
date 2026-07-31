@@ -1,6 +1,5 @@
 package com.callahan.callahancodigofuente.service;
 
-import aj.org.objectweb.asm.commons.JSRInlinerAdapter;
 import com.callahan.callahancodigofuente.dtos.CrewDTO;
 import com.callahan.callahancodigofuente.dtos.PeliculaDetalleDTO;
 import com.callahan.callahancodigofuente.dtos.PeliculasDTO;
@@ -11,17 +10,16 @@ import org.springframework.stereotype.Service;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class
 RecomendacionService {
 
-
+    // TODO: Eliminar la entidad EstadoAnimico, su repositorio y limpiar la base de datos (está generando problemas)
+    
     private final TmdbService tmdbService;
 
     public List<PeliculasDTO> recomendarPeliculas(List<PeliculasDTO> peliculas, Preferencias preferenciasUsuario) {
@@ -37,6 +35,7 @@ RecomendacionService {
         PeliculaDetalleDTO detallePelicula;
         PeliculasDTO pelicula;
 
+
         //Parte 2 del algoritmo para clasificar
         for (Map.Entry<PeliculasDTO, PeliculaDetalleDTO> entry : supervivientes.entrySet()) {
 
@@ -48,6 +47,11 @@ RecomendacionService {
             peliculasConPuntaje.put(pelicula, puntaje);
 
         }
+
+        List<PeliculasDTO> recomendacionesFinal = peliculasConPuntaje.entrySet().stream()
+                .sorted(Map.Entry.<PeliculasDTO, Double>comparingByValue().reversed())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
 
 
         return recomendacionesFinal;
