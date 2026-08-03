@@ -38,11 +38,6 @@ emociones.forEach(emocion => {
 });
 
 
-
-
-
-const btnVolver = document.getElementById("btn-volver");
-
 const btnVolver = document.getElementById("btn-volver");
 
 btnVolver.addEventListener('click', (event) => {
@@ -59,7 +54,7 @@ btnVolver.addEventListener('click', (event) => {
     });
 
     document.getElementById("zona-peliculas").innerHTML = '';
-}); // <--- ¡ESTA ES LA LÍNEA QUE TE FALTA! 🚨
+})
 
 const formularioEmociones = document.getElementById('formulario-emociones');
 
