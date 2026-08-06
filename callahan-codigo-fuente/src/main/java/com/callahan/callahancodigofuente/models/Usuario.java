@@ -27,6 +27,10 @@ public class Usuario {
 
     private LocalDate fechaRegistro;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private String rol = "ROLE_USER";
+
     @PrePersist
     private void actualizarFechaRegistro() {
 
