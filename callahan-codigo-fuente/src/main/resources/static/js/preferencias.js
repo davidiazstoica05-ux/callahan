@@ -191,6 +191,7 @@ function pintarTarjeta() {
         console.log("Procesando datos finales. ID rescatado: ", localStorage.getItem("idUsuario"));
 
         const paqueDatos = {
+
             id: parseInt(localStorage.getItem("idUsuario")),
             generosGustados: generosGustados,
             generosNoGustados: generosNoGustados,
@@ -200,6 +201,8 @@ function pintarTarjeta() {
             aniosGustados: aniosGustados,
             duracionPeliculasgustadas: duracionPeliculasGustadas,
             plataformasContratadas: JSON.parse(localStorage.getItem("plataformasUsuario"))
+
+
         };
 
         // Enviamos el paquete a Java

@@ -192,4 +192,6 @@ public class PreferenciasService extends BaseService<Preferencias, Long, Prefere
     }
 
 
+
+
 }
