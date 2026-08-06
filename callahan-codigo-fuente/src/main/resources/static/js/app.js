@@ -64,8 +64,10 @@ formularioEmociones.addEventListener('submit', (event) => {
     // Frena la recarga del navegador
     event.preventDefault();
 
-    const casillasMarcadas = document.querySelectorAll('.checkbox-emocion:checked');
+    const casillasMarcadas = document.querySelectorAll('input[name="emocion"]:checked');
     const emocionesSeleccionadas = [];
+    const anime = document.getElementById("checkbox-anime").checked;
+
 
     casillasMarcadas.forEach(caja => {
         emocionesSeleccionadas.push(caja.value);
@@ -76,7 +78,9 @@ formularioEmociones.addEventListener('submit', (event) => {
     const paqueteDatos = {
 
         emociones: emocionesSeleccionadas,
-        idUsuario: localStorage.getItem('idUsuario')
+        idUsuario: parseInt(localStorage.getItem('idUsuario')),
+        anime: anime
+
 
     }
 

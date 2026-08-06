@@ -18,8 +18,7 @@ import java.util.stream.Collectors;
 public class
 RecomendacionService {
 
-    // TODO: Eliminar la entidad EstadoAnimico, su repositorio y limpiar la base de datos (está generando problemas)
-    
+
     private final TmdbService tmdbService;
 
     public List<PeliculasDTO> recomendarPeliculas(List<PeliculasDTO> peliculas, Preferencias preferenciasUsuario) {
@@ -49,7 +48,9 @@ RecomendacionService {
         }
 
         List<PeliculasDTO> recomendacionesFinal = peliculasConPuntaje.entrySet().stream()
+                .filter(entry -> entry.getValue() >= 5.0) // 1. NOTA DE CORTE: Expulsamos a las castigadas
                 .sorted(Map.Entry.<PeliculasDTO, Double>comparingByValue().reversed())
+                .limit(15) // 2. LÍMITE: Devolvemos solo las 10 mejores
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
 
@@ -123,7 +124,7 @@ RecomendacionService {
 
         // Puntos sumados por cada coincidencia
         double sumaDirectorFav = 15;
-        double sumaEpocaFavorita = 5;
+        double sumaEpocaFavorita = 10;
         double sumaGeneroFav = 10;
         double sumaDuracion = 10;
 
@@ -147,6 +148,10 @@ RecomendacionService {
 
             if (epocaPelicula == preferenciasUsuario.getEpocapelicula()) {
                 puntaje += sumaEpocaFavorita;
+            } else {
+
+                puntaje -= 5;
+
             }
         }
 

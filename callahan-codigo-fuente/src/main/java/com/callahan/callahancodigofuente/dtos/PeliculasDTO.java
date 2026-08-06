@@ -33,5 +33,7 @@ public class PeliculasDTO implements Serializable {
 
     private String overview;
 
+    @JsonProperty("original_language")
+    private String originalLanguage;
 
 }

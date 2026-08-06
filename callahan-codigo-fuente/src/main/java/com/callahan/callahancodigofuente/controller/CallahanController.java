@@ -7,6 +7,7 @@ import com.callahan.callahancodigofuente.dtos.PeliculasDTO;
 import com.callahan.callahancodigofuente.models.IntencionDiaria;
 import com.callahan.callahancodigofuente.models.Preferencias;
 import com.callahan.callahancodigofuente.models.Usuario;
+import com.callahan.callahancodigofuente.repository.EstadoAnimicoRepository;
 import com.callahan.callahancodigofuente.repository.PreferenciasRepository;
 import com.callahan.callahancodigofuente.repository.UsuarioRepository;
 import com.callahan.callahancodigofuente.service.EstadoAnimicoService;
@@ -33,34 +34,23 @@ public class CallahanController {
     private final RecomendacionService recomendacionService;
     private final PreferenciasRepository preferenciasRepository;
 
-
     @PostMapping("/recomendar")
     public List<PeliculasDTO> recibirDatosEmociones(@RequestBody FiltroEmocionesDTO peticion) {
-
-
-        String generosEnString;
-
-        List<PeliculasDTO> peliculasPorGenero = new ArrayList<>();
-
         Long idUsuario = peticion.getIdUsuario();
 
-        Preferencias preferenciasUsuario;
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Detective no encontrado con ID: " + idUsuario));
 
-        Optional<Usuario> usuarioActual = usuarioRepository.findById(idUsuario);
+        Preferencias preferenciasUsuario = preferenciasRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Preferencias no encontradas para el detective: " + idUsuario));
 
+        estadoAnimicoService.agregarEstadoAnimico(peticion, usuario);
 
-        preferenciasUsuario = preferenciasRepository.getReferenceById(idUsuario);
-
-
-        estadoAnimicoService.agregarEstadoAnimico(peticion, usuarioActual.get());
-
-        generosEnString = transformarGenerosEnString(peticion);
-
-        peliculasPorGenero = tmdbService.obtenerPeliculasPorGenero(generosEnString);
-
+        String generosEnString = transformarGenerosEnString(peticion);
+        List<PeliculasDTO> peliculasPorGenero = tmdbService.obtenerPeliculasPorGenero(generosEnString,
+                peticion.isAnime(), preferenciasUsuario.getPlataformasContratadas());
 
         return recomendacionService.recomendarPeliculas(peliculasPorGenero, preferenciasUsuario);
-
     }
 
 

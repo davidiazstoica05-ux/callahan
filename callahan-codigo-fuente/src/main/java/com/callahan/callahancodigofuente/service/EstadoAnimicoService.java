@@ -11,28 +11,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class EstadoAnimicoService extends BaseService <EstadoAnimico, Long, EstadoAnimicoRepository>  {
+public class EstadoAnimicoService extends BaseService<EstadoAnimico, Long, EstadoAnimicoRepository> {
 
 
+    public void agregarEstadoAnimico(@RequestBody FiltroEmocionesDTO peticion, Usuario usuario) {
 
 
-    public void agregarEstadoAnimico(@RequestBody FiltroEmocionesDTO peticion, Usuario usuario){
+        List<EstadoAnimico> emociones = new ArrayList<>();
 
-
-        peticion.getEmociones().stream().forEach(e -> {
+        peticion.getEmociones().forEach(e -> {
 
             EstadoAnimico nuevoEstado = EstadoAnimico.builder()
                     .fecha(LocalDate.now())
                     .intencionDiaria(e)
                     .usuario(usuario)
+                    .anime(peticion.isAnime())
                     .build();
-
-            this.save(nuevoEstado);
-
         });
+        this.repo.saveAll(emociones);
     }
 
 }

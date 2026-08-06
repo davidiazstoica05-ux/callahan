@@ -29,9 +29,9 @@ public class EstadoAnimico {
     @Enumerated(EnumType.STRING)
     private IntencionDiaria intencionDiaria;
 
-    LocalDate fecha;
+    private LocalDate fecha;
 
-
+    private boolean anime;
 
 
 }

@@ -176,6 +176,8 @@ h2 {
     transform: translate(4px, 4px);
 }
 
+
+
 #pantalla-inicio,
 #pantalla-interrogatorio,
 #pantalla-resultados {
@@ -254,4 +256,25 @@ h2 {
     -webkit-line-clamp: 6;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+/* --- ESTILOS DEL CONTENEDOR DEL FILTRO --- */
+.contenedor-filtro-anime {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Lo centra encima del botón */
+    gap: 15px;
+    /* Espacio entre el texto y el interruptor */
+    margin: 25px 0;
+    /* Margen por arriba y por abajo */
+    font-family: Arial, sans-serif;
+    /* Ajusta a la fuente de tu web */
+    font-weight: bold;
+}
+
+.texto-filtro {
+    font-size: 1.1rem;
+    color: #333;
+    /* Ajusta si tu web es modo oscuro */
 }

@@ -35,8 +35,6 @@ public class Preferencias {
     private List<Integer> generosVetados;
 
 
-
-
     @Enumerated(EnumType.STRING)
     private EpocasPeliculas epocapelicula;
 
@@ -49,5 +47,4 @@ public class Preferencias {
     private Long idDirectorOdiado;
 
 
-    //Añadir atributo de las plataformas que tiene el usario
 }
