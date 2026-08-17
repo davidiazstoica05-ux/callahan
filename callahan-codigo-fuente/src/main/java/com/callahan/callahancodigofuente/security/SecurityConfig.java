@@ -21,13 +21,15 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/logistica/**").hasAnyRole("LOGISTICA", "ADMIN")
 
-                        .requestMatchers("/rrhh/**").hasAnyRole("RRHH", "ADMIN")
-
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-
-                        .requestMatchers("/login", "/css/**", "/js/**", "/img/**", "/h2-console/**").permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/css/**",
+                                "/js/**",
+                                "/api/detectives/registro",
+                                "/h2-console/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .requestCache(cache -> {
@@ -37,14 +39,11 @@ public class SecurityConfig {
                 })
                 .exceptionHandling(exception -> exception
                         .accessDeniedPage("/acceso-denegado")
-                )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .permitAll()
                 );
 
         http.csrf(csrf -> csrf
                 .ignoringRequestMatchers("/h2-console/**")
+                .disable()
         );
 
         http.headers(headers -> headers
@@ -57,6 +56,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder(10);
     }
 
