@@ -92,8 +92,9 @@ formRegistro.addEventListener('submit', (event) => {
     const regFecha = document.getElementById('reg-fecha').value;
     const regPais = document.getElementById('reg-pais').value;
 
-
     const esValido = paises.includes(regPais);
+
+
 
     if (esValido) {
         console.log(regUsuario);
@@ -106,7 +107,7 @@ formRegistro.addEventListener('submit', (event) => {
             apellido1: regPrimerApellido,
             nombreReal: regNombreReal,
             fechaNacimiento: regFecha,
-            pais: regPais
+            pais: regPais,
         };
 
         console.log(nuevoDetective);

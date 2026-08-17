@@ -27,13 +27,20 @@ public class Usuario {
 
     private LocalDate fechaRegistro;
 
-    @PrePersist
-    private void actualizarFechaRegistro() {
 
+    @Column(nullable = false)
+    private String rol;
+
+    //Solo se puede tener un PrePersist por entidad
+    @PrePersist
+    private void onPrePersist() {
+        // 1. Tu lógica original para la fecha
         setFechaRegistro(LocalDate.now());
 
-
+        // 2. El blindaje de seguridad para el rol
+        if (this.rol == null) {
+            this.rol = "ROLE_USER";
+        }
     }
-
 
 }
