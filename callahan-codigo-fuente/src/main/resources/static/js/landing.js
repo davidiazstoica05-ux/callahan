@@ -1,27 +1,53 @@
 
-//Gestión del modal 
+//Uso de IA para ayudarme a organizar el codigo mas limpio 
 
+// ==========================================
+// 1. GESTIÓN DE MODALES (Login y Registro)
+// ==========================================
+
+
+// Capturamos los elementos del Registro
 const btnRegistro = document.querySelector('.btn-principal');
 const modalRegistro = document.getElementById('modal-registro');
-const overlay = document.getElementById('modal-overlay');
 const btnCerrarRegistro = document.getElementById('cerrar-registro');
+
+// Capturamos los elementos del Login
+const btnLogin = document.getElementById('btn-iniciar-sesion');
+const modalLogin = document.getElementById('modal-login');
+const btnCerrarLogin = document.getElementById('cerrar-login');
+
+// Capturamos el fondo oscuro (Común para ambos)
+const overlay = document.getElementById('modal-overlay');
+
+// --- EVENTOS DE APERTURA ---
 
 btnRegistro.addEventListener('click', () => {
     overlay.classList.remove('oculto');
     modalRegistro.classList.remove('oculto');
 });
 
+btnLogin.addEventListener('click', () => {
+    overlay.classList.remove('oculto');
+    modalLogin.classList.remove('oculto');
+});
+
+// --- EVENTOS DE CIERRE ---
+
+// Función unificada para limpiar la pantalla
 function cerrarModales() {
     overlay.classList.add('oculto');
     modalRegistro.classList.add('oculto');
+    modalLogin.classList.add('oculto');
 }
 
 btnCerrarRegistro.addEventListener('click', cerrarModales);
+btnCerrarLogin.addEventListener('click', cerrarModales);
 overlay.addEventListener('click', cerrarModales);
 
 
-
-//Cargar lista de paises
+// ==========================================
+// 2. CARGA DE RECURSOS (Lista de Países)
+// ==========================================
 
 const datalistPaises = document.getElementById('lista-paises');
 
@@ -70,20 +96,22 @@ const paises = [
 paises.forEach(pais => {
     const nuevaOpcion = document.createElement('option');
     nuevaOpcion.value = pais;
-    nuevaOpcion.textContent = pais
-
-
+    nuevaOpcion.textContent = pais;
     datalistPaises.appendChild(nuevaOpcion);
 });
 
-//Gestón de dato Formularío 
+
+// ==========================================
+// 3. GESTIÓN DEL FORMULARIO DE REGISTRO
+// ==========================================
+
 const formRegistro = document.getElementById("form-registro");
 
-
 formRegistro.addEventListener('submit', (event) => {
-
+    // Frenamos la recarga del navegador
     event.preventDefault();
 
+    // Recolectamos los datos del DOM
     const regUsuario = document.getElementById('reg-usuario').value;
     const regEmail = document.getElementById('reg-email').value;
     const regPassw = document.getElementById('reg-password').value;
@@ -92,14 +120,11 @@ formRegistro.addEventListener('submit', (event) => {
     const regFecha = document.getElementById('reg-fecha').value;
     const regPais = document.getElementById('reg-pais').value;
 
+    // Escudo de validación
     const esValido = paises.includes(regPais);
 
-
-
     if (esValido) {
-        console.log(regUsuario);
-
-        //El nombre exacto que hay en Java 
+        // Empaquetado de datos
         const nuevoDetective = {
             nombreUsuario: regUsuario,
             email: regEmail,
@@ -110,16 +135,15 @@ formRegistro.addEventListener('submit', (event) => {
             pais: regPais,
         };
 
-        console.log(nuevoDetective);
+        console.log("Iniciando transmisión de registro al cuartel general...", nuevoDetective);
 
+        // Envío al servidor
         fetch('http://localhost:8080/api/detectives/registro', {
-
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(nuevoDetective)
-
         })
             .then(respuesta => {
                 if (respuesta.ok) {
@@ -129,39 +153,83 @@ formRegistro.addEventListener('submit', (event) => {
                 }
             })
             .then(datos => {
-                // 1. CONGELAMOS EL TIEMPO: Imprimimos exactamente qué devolvió Java
-                console.log("Paquete recibido de Java tras registrar:", datos);
+                console.log("Respuesta afirmativa de Java:", datos);
 
-                // 2. EXTRAEMOS EL ID: Por si Java lo ha llamado 'id' en lugar de 'idUsuario'
                 const idRescatado = datos.idUsuario || datos.id;
 
-                // 3. GUARDAMOS Y AVISAMOS
+                // Persistencia local y redirección
                 localStorage.setItem("idUsuario", idRescatado);
                 alert("¡Detective registrado con éxito! Tu ID asignado es el: " + idRescatado);
-
-                // 4. REDIRECCIÓN CORRECTA: Ahora vamos a la pantalla de plataformas
                 window.location.href = "plataformas.html";
             })
             .catch(error => {
-                // Si algo falla, lo mostramos en un alert para que no pase desapercibido
                 console.error("Error crítico de conexión:", error);
                 alert("Hubo un fallo en el registro. Mira la consola (F12).");
             });
 
     } else {
+        // Bloqueo visual amigable en vez de romper la consola
+        alert("El país introducido no es válido. Por favor, selecciona uno de la lista.");
+        throw new Error("El país no se encuentra en la lista oficial.");
+    }
+});
 
-        //Esto hay que llevarlo al backend
-        throw new Error("El país no se encuentra en la lista");
 
+// ==========================================
+// 4. GESTIÓN DEL FORMULARIO DE LOGIN 
+// ==========================================
+
+const formLogin = document.getElementById("form-login");
+
+formLogin.addEventListener('submit', (event) => {
+    // Frena la recarga del navegador al intentar loguear
+    event.preventDefault();
+
+    // Chivato temporal para comprobar que el botón funciona
+    console.log("¡Formulario de login interceptado correctamente!");
+
+
+    const nombreUsuario = document.getElementById("login-usuario").value;
+    const passw = document.getElementById("login-password").value;
+
+    const iniciarSesion = {
+
+        nombreUsuario: nombreUsuario,
+        passw: passw
 
     }
 
+    console.log(iniciarSesion);
+
+    fetch('http://localhost:8080/api/detectives/iniciarSesion', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(iniciarSesion)
+    }).then(respuesta => {
+        if (respuesta.ok) {
+            return respuesta.json();
+        } else {
+            throw new Error("El servidor no devolvió un 200 OK.");
+        }
+    }).then(datos => {
+        console.log("Respuesta afirmativa de Java:", datos);
+
+        const idRescatado = datos.idUsuario || datos.id;
+
+        localStorage.setItem("idUsuario", idRescatado);
+
+        window.location.href = "mainPage.html";
+    }).catch(error => {
+        console.error("Error crítico de conexión:", error);
+        alert("Hubo un fallo en el login. Mira la consola (F12).");
+    });
 
 
 
 
 
 
-})
 
-
+});

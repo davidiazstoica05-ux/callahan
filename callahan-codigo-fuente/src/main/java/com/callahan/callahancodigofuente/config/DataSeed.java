@@ -7,6 +7,7 @@ import com.callahan.callahancodigofuente.repository.PreferenciasRepository;
 import com.callahan.callahancodigofuente.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder; // Importación necesaria
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ public class DataSeed implements CommandLineRunner {
 
     private final UsuarioRepository usuarioRepository;
     private final PreferenciasRepository preferenciasRepository;
+    private final PasswordEncoder passwordEncoder; // Inyectamos la herramienta de encriptación
 
     @Override
     public void run(String... args) throws Exception {
@@ -29,10 +31,9 @@ public class DataSeed implements CommandLineRunner {
                 .nombreReal("Paco")
                 .apellido1("García")
                 .email("hater@callahan.com")
-                .passw("1234")
+                .passw(passwordEncoder.encode("1234")) // Contraseña encriptada
                 .fechaNacimiento(LocalDate.of(1995, 5, 20))
                 .pais("España")
-                // La fecha de registro se pone sola por tu @PrePersist
                 .build();
 
         // Lo guardamos primero para que la base de datos le asigne su ID oficial
@@ -60,7 +61,7 @@ public class DataSeed implements CommandLineRunner {
                 .nombreReal("Takeshi")
                 .apellido1("Yamamoto")
                 .email("anime@callahan.com")
-                .passw("ghibli123")
+                .passw(passwordEncoder.encode("ghibli123")) // Contraseña encriptada
                 .fechaNacimiento(LocalDate.of(2002, 3, 14))
                 .pais("España")
                 .build();
@@ -79,6 +80,7 @@ public class DataSeed implements CommandLineRunner {
                 .generosVetados(List.of(37, 99)) // 37: Western, 99: Documental (Para probar los descartes)
                 .plataformasContratadas(Set.of("CRUNCHYROLL", "NETFLIX", "AMAZON_PRIME")) // El combo de streaming de anime
                 .build();
+
         // ==========================================
         // 3. EL INSPECTOR CLÁSICO (Anti-moderno)
         // ==========================================
@@ -87,7 +89,7 @@ public class DataSeed implements CommandLineRunner {
                 .nombreReal("Harry")
                 .apellido1("Callahan")
                 .email("magnum@callahan.com")
-                .passw("make_my_day")
+                .passw(passwordEncoder.encode("make_my_day")) // Contraseña encriptada
                 .fechaNacimiento(LocalDate.of(1965, 8, 12))
                 .pais("España")
                 .build();
@@ -113,7 +115,7 @@ public class DataSeed implements CommandLineRunner {
                 .nombreReal("Sean")
                 .apellido1("Boswell")
                 .email("drift@callahan.com")
-                .passw("nitro123")
+                .passw(passwordEncoder.encode("nitro123")) // Contraseña encriptada
                 .fechaNacimiento(LocalDate.of(1999, 4, 15))
                 .pais("España")
                 .build();
@@ -139,7 +141,7 @@ public class DataSeed implements CommandLineRunner {
                 .nombreReal("Oh")
                 .apellido1("Dae-su")
                 .email("oldboy@callahan.com")
-                .passw("dumplings")
+                .passw(passwordEncoder.encode("dumplings")) // Contraseña encriptada
                 .fechaNacimiento(LocalDate.of(1985, 11, 2))
                 .pais("España")
                 .build();
@@ -165,7 +167,7 @@ public class DataSeed implements CommandLineRunner {
                 .nombreReal("Dev")
                 .apellido1("Null")
                 .email("tech@callahan.com")
-                .passw("algoritmo")
+                .passw(passwordEncoder.encode("algoritmo")) // Contraseña encriptada
                 .fechaNacimiento(LocalDate.of(2003, 1, 19))
                 .pais("España")
                 .build();
@@ -191,7 +193,7 @@ public class DataSeed implements CommandLineRunner {
                 .nombreReal("Laura")
                 .apellido1("Gómez")
                 .email("cozy@callahan.com")
-                .passw("manta_y_peli")
+                .passw(passwordEncoder.encode("manta_y_peli")) // Contraseña encriptada
                 .fechaNacimiento(LocalDate.of(1992, 12, 5))
                 .pais("España")
                 .build();

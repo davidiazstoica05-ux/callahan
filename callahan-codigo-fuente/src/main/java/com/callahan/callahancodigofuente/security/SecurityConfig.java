@@ -28,6 +28,7 @@ public class SecurityConfig {
                                 "/css/**",
                                 "/js/**",
                                 "/api/detectives/registro",
+                                "/api/detectives/iniciarSesion",
                                 "/h2-console/**"
                         ).permitAll()
                         .anyRequest().authenticated()

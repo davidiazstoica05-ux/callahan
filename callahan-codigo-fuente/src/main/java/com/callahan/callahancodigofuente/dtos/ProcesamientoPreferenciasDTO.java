@@ -20,15 +20,15 @@ import java.util.Set;
 public class ProcesamientoPreferenciasDTO {
 
 
-    Long id;
-    List<Integer> generosGustados;
-    List<Integer> generosNoGustados;
-    List<Integer> directoresOdiados;
-    List<Integer> directoresFav;
-    List<String> aniosGustados;
-    List<String> aniosDescartes;
-    List<Double> duracionPeliculasgustadas;
-    Set<String> plataformasContratadas;
+    private Long id;
+    private List<Integer> generosGustados;
+    private List<Integer> generosNoGustados;
+    private List<Integer> directoresOdiados;
+    private List<Integer> directoresFav;
+    private List<String> aniosGustados;
+    private List<String> aniosDescartes;
+    private List<Double> duracionPeliculasgustadas;
+    private Set<String> plataformasContratadas;
 
 
 }
