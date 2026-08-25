@@ -128,6 +128,35 @@ formularioEmociones.addEventListener('submit', (event) => {
 
 });
 
+// ==========================================
+// PROTOCOLO DE ABANDONO (Logout)
+// ==========================================
+const btnCerrarSesion = document.getElementById("btn-cerrar-sesion");
+
+if (btnCerrarSesion) {
+    btnCerrarSesion.addEventListener("click", () => {
+        console.log("Iniciando protocolo de abandono de sesión...");
+
+        fetch('http://localhost:8080/api/detectives/cerrarSesion', {
+            method: 'POST'
+        })
+            .then(respuesta => {
+                if (respuesta.ok) {
+                    // 1. Quemamos los documentos locales
+                    localStorage.removeItem("idUsuario");
+                    localStorage.removeItem("plataformasUsuario");
+
+                    // 2. Volvemos a la comisaría (Landing page)
+                    window.location.href = "index.html";
+                } else {
+                    console.error("El servidor se negó a cerrar la sesión.");
+                }
+            })
+            .catch(error => {
+                console.error("Error de comunicación al intentar desconectar:", error);
+            });
+    });
+}
 
 
 

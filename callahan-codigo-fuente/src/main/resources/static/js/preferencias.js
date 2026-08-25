@@ -188,8 +188,6 @@ function pintarTarjeta() {
     // 1. Control de flujo: Si llegamos a la 21, cerramos el juego y enviamos a Java
     if (indiceActual === barajaFinal.length) {
 
-        console.log("Procesando datos finales. ID rescatado: ", localStorage.getItem("idUsuario"));
-
         const paqueDatos = {
 
             id: parseInt(localStorage.getItem("idUsuario")),
