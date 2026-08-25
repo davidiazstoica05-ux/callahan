@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error 403 - Acceso Denegado</title>
+    <link rel="stylesheet" href="css/global.css">
+    <style>
+        /* --- ESTILOS ESPECÍFICOS DEL ERROR 403 --- */
+        body {
+            background-color: var(--rojo-bass);
+            color: var(--blanco-roto);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Textura de ruido de fondo (heredada de tu app.css) */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .contenedor-error {
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 8px solid var(--negro-absoluto);
+            padding: 4rem 2rem;
+            background-color: var(--blanco-roto);
+            box-shadow: 15px 15px 0px var(--negro-absoluto);
+            transform: rotate(-2deg);
+            max-width: 600px;
+        }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 8rem;
+            color: var(--rojo-bass);
+            line-height: 1;
+            text-shadow: 4px 4px 0px var(--negro-absoluto);
+            margin-bottom: 0;
+            transform: rotate(2deg);
+        }
+
+        h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem;
+            color: var(--negro-absoluto);
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            background-color: var(--rojo-bass);
+            color: var(--blanco-roto);
+            padding: 0.5rem 1rem;
+            transform: rotate(-1deg);
+            box-shadow: -4px 4px 0px var(--negro-absoluto);
+        }
+
+        p {
+            font-family: monospace;
+            font-size: 1.2rem;
+            color: var(--negro-absoluto);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+            font-weight: bold;
+        }
+
+        .btn-accion {
+            background-color: var(--negro-absoluto);
+            color: var(--blanco-roto);
+            border: 4px solid var(--negro-absoluto);
+            padding: 1rem 2rem;
+            font-size: 1.5rem;
+            font-family: 'Fjalla One', sans-serif;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 6px 6px 0px var(--rojo-bass);
+            transition: all 0.1s;
+            text-decoration: none;
+            /* Porque es un enlace */
+        }
+
+        .btn-accion:hover {
+            transform: translate(4px, 4px);
+            box-shadow: 2px 2px 0px var(--rojo-bass);
+            background-color: var(--blanco-roto);
+            color: var(--negro-absoluto);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="contenedor-error">
+        <h1>403</h1>
+        <h2>Zona Restringida</h2>
+        <p>"No tienes jurisdicción aquí.<br>Da la vuelta antes de que me cabree."</p>
+        <a href="index.html" class="btn-accion">Volver a la Comisaría</a>
+    </div>
+</body>
+
+</html>
