@@ -309,3 +309,15 @@ footer {
     color: var(--negro-absoluto);
     border-color: var(--negro-absoluto);
 }
+
+.grupo-input input:not(:placeholder-shown):invalid {
+    border-color: var(--rojo-bass);
+    box-shadow: 4px 4px 0px var(--rojo-bass);
+    background-color: rgba(211, 47, 47, 0.1);
+}
+
+.grupo-input input:not(:placeholder-shown):valid {
+    border-color: #2e7d32;
+    /* Verde sutil */
+    box-shadow: 4px 4px 0px #2e7d32;
+}

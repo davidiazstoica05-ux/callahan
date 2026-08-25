@@ -125,6 +125,7 @@ RecomendacionService {
         // Puntos sumados por cada coincidencia
         double sumaDirectorFav = 15;
         double sumaEpocaFavorita = 10;
+        double restaGeneroFav= 20;
         double sumaGeneroFav = 10;
         double sumaDuracion = 10;
 
@@ -172,6 +173,10 @@ RecomendacionService {
 
             if (tieneGeneroFav) {
                 puntaje += sumaGeneroFav;
+            }else {
+
+                puntaje -= restaGeneroFav;
+
             }
         }
 

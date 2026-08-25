@@ -105,73 +105,67 @@ paises.forEach(pais => {
 // 3. GESTIÓN DEL FORMULARIO DE REGISTRO
 // ==========================================
 
+
+
 const formRegistro = document.getElementById("form-registro");
+const inputPais = document.getElementById('reg-pais');
+
+
+const inputFecha = document.getElementById('reg-fecha');
+
+// Calculamos los límites de edad (Entre 10 y 100 años)
+const hoy = new Date();
+
+const fechaMax = new Date(hoy.getFullYear() - 10, hoy.getMonth(), hoy.getDate());
+inputFecha.max = fechaMax.toISOString().split("T")[0]; // Formato YYYY-MM-DD
+
+const fechaMin = new Date(hoy.getFullYear() - 100, hoy.getMonth(), hoy.getDate());
+inputFecha.min = fechaMin.toISOString().split("T")[0]; // Formato YYYY-MM-DD
+
+
+inputPais.addEventListener('input', () => {
+    if (!paises.includes(inputPais.value.trim())) {
+        inputPais.setCustomValidity("Debes seleccionar un país válido de la lista.");
+    } else {
+        // Libera el formulario
+        inputPais.setCustomValidity("");
+    }
+});
 
 formRegistro.addEventListener('submit', (event) => {
-    // Frenamos la recarga del navegador
     event.preventDefault();
 
-    // Recolectamos los datos del DOM
-    const regUsuario = document.getElementById('reg-usuario').value;
-    const regEmail = document.getElementById('reg-email').value;
-    const regPassw = document.getElementById('reg-password').value;
-    const regPrimerApellido = document.getElementById('reg-apellido').value;
-    const regNombreReal = document.getElementById('reg-nombre').value;
-    const regFecha = document.getElementById('reg-fecha').value;
-    const regPais = document.getElementById('reg-pais').value;
+    // Recolectamos los datos limpios
+    const nuevoDetective = {
+        nombreUsuario: document.getElementById('reg-usuario').value.trim(),
+        email: document.getElementById('reg-email').value.trim(),
+        passw: document.getElementById('reg-password').value,
+        apellido1: document.getElementById('reg-apellido').value.trim(),
+        nombreReal: document.getElementById('reg-nombre').value.trim(),
+        fechaNacimiento: document.getElementById('reg-fecha').value,
+        pais: inputPais.value.trim(),
+    };
 
-    // Escudo de validación
-    const esValido = paises.includes(regPais);
+    console.log("Iniciando transmisión de registro al cuartel general...", nuevoDetective);
 
-    if (esValido) {
-        // Empaquetado de datos
-        const nuevoDetective = {
-            nombreUsuario: regUsuario,
-            email: regEmail,
-            passw: regPassw,
-            apellido1: regPrimerApellido,
-            nombreReal: regNombreReal,
-            fechaNacimiento: regFecha,
-            pais: regPais,
-        };
-
-        console.log("Iniciando transmisión de registro al cuartel general...", nuevoDetective);
-
-        // Envío al servidor
-        fetch('http://localhost:8080/api/detectives/registro', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(nuevoDetective)
+    fetch('http://localhost:8080/api/detectives/registro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(nuevoDetective)
+    })
+        .then(respuesta => {
+            if (respuesta.ok) return respuesta.json();
+            throw new Error("El servidor no devolvió un 200 OK.");
         })
-            .then(respuesta => {
-                if (respuesta.ok) {
-                    return respuesta.json();
-                } else {
-                    throw new Error("El servidor no devolvió un 200 OK.");
-                }
-            })
-            .then(datos => {
-                console.log("Respuesta afirmativa de Java:", datos);
-
-                const idRescatado = datos.idUsuario || datos.id;
-
-                // Persistencia local y redirección
-                localStorage.setItem("idUsuario", idRescatado);
-                alert("¡Detective registrado con éxito! Tu ID asignado es el: " + idRescatado);
-                window.location.href = "plataformas.html";
-            })
-            .catch(error => {
-                console.error("Error crítico de conexión:", error);
-                alert("Hubo un fallo en el registro. Mira la consola (F12).");
-            });
-
-    } else {
-        // Bloqueo visual amigable en vez de romper la consola
-        alert("El país introducido no es válido. Por favor, selecciona uno de la lista.");
-        throw new Error("El país no se encuentra en la lista oficial.");
-    }
+        .then(datos => {
+            const idRescatado = datos.idUsuario || datos.id;
+            localStorage.setItem("idUsuario", idRescatado);
+            alert("¡Detective registrado con éxito!");
+            window.location.href = "plataformas.html";
+        })
+        .catch(error => {
+            console.error("Error crítico de conexión:", error);
+        });
 });
 
 

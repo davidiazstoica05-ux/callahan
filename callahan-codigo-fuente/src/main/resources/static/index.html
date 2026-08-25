@@ -82,11 +82,11 @@
                 <p>Para poder crear tu perfil necesitamos algunos datos personales. No los compartiremos con nadie.</p>
                 <div class="grupo-input">
                     <label for="reg-nombre">Nombre Real</label>
-                    <input type="text" id="reg-nombre" required>
+                    <input type="text" id="reg-nombre" required title="Por favor, introduce tu nombre real.">
                 </div>
                 <div class="grupo-input">
                     <label for="reg-apellido">Primer Apellido</label>
-                    <input type="text" id="reg-apellido" required>
+                    <input type="text" id="reg-apellido" required title="Por favor, introduce tu primer apellido.">
                 </div>
             </fieldset>
 
@@ -95,7 +95,8 @@
                 <p>Proporciona tu información de contacto para que podamos mantenerte informado.</p>
                 <div class="grupo-input">
                     <label for="reg-email">Correo Electrónico</label>
-                    <input type="email" id="reg-email" required>
+                    <input type="email" id="reg-email" required
+                        title="Por favor, introduce un correo electrónico válido.">
                 </div>
             </fieldset>
 
@@ -104,11 +105,14 @@
                 <p>Crea un nombre de usuario y una contraseña para acceder a tu perfil.</p>
                 <div class="grupo-input">
                     <label for="reg-usuario">Nombre en Clave (Usuario)</label>
-                    <input type="text" id="reg-usuario" required>
+                    <input type="text" id="reg-usuario" required minlength="3" maxlength="20"
+                        title="El nombre de usuario debe tener entre 3 y 20 caracteres.">
+
                 </div>
                 <div class="grupo-input">
                     <label for="reg-password">Contraseña</label>
-                    <input type="password" id="reg-password" required>
+                    <input type="password" id="reg-password" required minlength="6" maxlength="100"
+                        title="La contraseña debe tener entre 6 y 100 caracteres.">
                 </div>
             </fieldset>
 
@@ -117,7 +121,7 @@
                 <p>Proporciona algunos detalles adicionales sobre ti.</p>
                 <div class="grupo-input">
                     <label for="reg-fecha">Fecha de Nacimiento</label>
-                    <input type="date" id="reg-fecha" required>
+                    <input type="date" id="reg-fecha" required title="Por favor, introduce tu fecha de nacimiento.">
                 </div>
                 <div class="grupo-input">
                     <label for="reg-pais">País de Operaciones</label>
