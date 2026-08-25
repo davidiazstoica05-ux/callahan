@@ -1,4 +1,27 @@
 
+if (localStorage.getItem("idUsuario") != null) {
+
+
+    fetch('/api/detectives/cerrarSesion', {
+
+        method: 'POST'
+    }).then(respuesta => {
+
+        if (respuesta.ok) {
+
+            localStorage.removeItem("idUsuario");
+            localStorage.removeItem("plataformasUsuario");
+
+        } else {
+
+            console.log("El servidor no devolvio 200");
+
+        }
+    }).catch(error => console.error("Error de red al destruir la sesión: ", error));
+
+}
+
+
 //Uso de IA para ayudarme a organizar el codigo mas limpio 
 
 // ==========================================
@@ -219,11 +242,6 @@ formLogin.addEventListener('submit', (event) => {
         console.error("Error crítico de conexión:", error);
         alert("Hubo un fallo en el login. Mira la consola (F12).");
     });
-
-
-
-
-
 
 
 });

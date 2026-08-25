@@ -32,7 +32,8 @@ public class SecurityConfig {
                                 "/h2-console/**",
                                 "/acceso-denegado",
                                 "/403.html",
-                                "/error"
+                                "/error",
+                                "/api/detectives/cerrarSesion"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -56,6 +57,16 @@ public class SecurityConfig {
 
         http.headers(headers -> headers
                 .frameOptions(opts -> opts.disable())
+        );
+
+        http.logout((logout) -> logout
+                .logoutUrl("/api/detectives/cerrarSesion")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutSuccessHandler((request, response,
+                                       authentication) -> {
+                    response.setStatus(200);
+                })
         );
 
         return http.build();
