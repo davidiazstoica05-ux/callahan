@@ -214,6 +214,32 @@ public class DataSeed implements CommandLineRunner {
         // Guardamos las preferencias
         preferenciasRepository.save(preferenciasOtaku);
 
+        // ==========================================
+        // 8. EL CINÉFILO GAFAPASTA (Cine de autor e independiente)
+        // ==========================================
+        Usuario auteur = Usuario.builder()
+                .nombreUsuario("Auteur77")
+                .nombreReal("Vincent")
+                .apellido1("Vega")
+                .email("rosebud@callahan.com")
+                .passw(passwordEncoder.encode("rosebud")) // Contraseña encriptada
+                .fechaNacimiento(LocalDate.of(1977, 11, 17))
+                .pais("España")
+                .build();
+        Usuario auteurGuardado = usuarioRepository.save(auteur);
+
+        Preferencias prefAuteur = Preferencias.builder()
+                .usuario(auteurGuardado)
+                .epocapelicula(EpocasPeliculas.CINE_CLASICO) // Blanco y negro puro
+                .toleranciaALaDuracion(210.0) // Aguanta películas de tres horas y media sin pestañear
+                .idDirectorFav(240L) // Stanley Kubrick
+                .idDirectorOdiado(15218L) // Zack Snyder (Anti-blockbusters)
+                .generosFavoritos(List.of(18, 36, 99)) // 18: Drama, 36: Historia, 99: Documental
+                .generosVetados(List.of(28, 10751)) // 28: Acción, 10751: Familia (Cero explosiones, cero niños)
+                .plataformasContratadas(Set.of("FILMIN", "MUBI")) // Plataformas de cine indie
+                .build();
+        preferenciasRepository.save(prefAuteur);
+
         // Un pequeño chivato en consola para saber que todo ha ido bien
         System.out.println("==================================================");
         System.out.println("✅ DATA SEED EJECUTADO");

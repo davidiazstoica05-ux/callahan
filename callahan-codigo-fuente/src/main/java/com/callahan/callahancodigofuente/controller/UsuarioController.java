@@ -6,6 +6,7 @@ import com.callahan.callahancodigofuente.repository.UsuarioRepository;
 import com.callahan.callahancodigofuente.service.UsuarioService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class UsuarioController {
 
 
     @PostMapping("/registro")
-    public ResponseEntity<Usuario> crearUsuario(@RequestBody Usuario nuevoUsuario, HttpServletRequest request) { // Inyectamos el request
+    public ResponseEntity<Usuario> crearUsuario(@Valid @RequestBody Usuario nuevoUsuario, HttpServletRequest request) { // Inyectamos el request
 
         //Cotraseña guardad en plano para usar luego el autologin
         String contrasenaPlana = nuevoUsuario.getPassw();
@@ -51,7 +52,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/iniciarSesion")
-    public ResponseEntity<Usuario> iniciarSesion(@RequestBody LoginRequestDTO datosInicioSesion, HttpServletRequest request) {
+    public ResponseEntity<Usuario> iniciarSesion( @Valid @RequestBody LoginRequestDTO datosInicioSesion, HttpServletRequest request) {
 
         //En lugar de hacerlo manualmente SpringSecurity se encarga de todo
         try {
