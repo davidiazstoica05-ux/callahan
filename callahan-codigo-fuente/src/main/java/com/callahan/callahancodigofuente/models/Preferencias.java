@@ -15,35 +15,36 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
-//Recordar que preferencia depende (composicion)de un usuario por lo tanto su ID
-// debería de ser el mismo que el del usuario
 public class Preferencias {
 
-  @Id
-  private long id;
+    @Id
+    private Long id;
 
 
-  @OneToOne
-  @JoinColumn(name = "idUsuario")
-  @MapsId
-  private Usuario usuario;
+    @OneToOne
+    @JoinColumn(name = "idUsuario")
+    @MapsId
+    private Usuario usuario;
 
 
-  @ElementCollection
-  private List<String> generosFavoritos;
+    @ElementCollection
+    private List<Integer> generosFavoritos;
 
 
-  @ElementCollection
-  private List<String> generosVetados;
+    @ElementCollection
+    private List<Integer> generosVetados;
 
-  private String epocaCinematograficaFav;
-  private String toleranciaALaDuracion;
 
-  @ElementCollection
-  private Set<String> plataformasContratadas;
+    @Enumerated(EnumType.STRING)
+    private EpocasPeliculas epocapelicula;
 
-  private Long idDirectorFav;
-  private Long idDirectorOdiado;
+    private double toleranciaALaDuracion;
+
+    @ElementCollection
+    private Set<String> plataformasContratadas;
+
+    private Long idDirectorFav;
+    private Long idDirectorOdiado;
+
 
 }

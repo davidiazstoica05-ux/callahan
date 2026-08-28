@@ -1,0 +1,26 @@
+/* --- global.css --- */
+@import url('https://fonts.googleapis.com/css2?family=Fjalla+One&family=Oswald:wght@700&display=swap');
+
+/* 1. RESET Y VARIABLES MUNDIALES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --rojo-bass: #D32F2F;
+    --negro-absoluto: #0A0A0A;
+    --blanco-roto: #F5F2EB;
+}
+
+/* 2. UTILIDADES GLOBALES */
+.oculto {
+    display: none !important;
+}
+
+/* 3. TIPOGRAFÍA BASE */
+body {
+    font-family: 'Fjalla One', sans-serif;
+    overflow-x: hidden;
+}

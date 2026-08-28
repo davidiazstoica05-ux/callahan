@@ -1,0 +1,280 @@
+/* --- app.css --- */
+
+/* FONDO Y TEXTURA DE LA APP */
+body {
+    background-color: var(--rojo-bass);
+    color: var(--blanco-roto);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 50;
+}
+
+/* ANIMACIONES Y TÍTULOS */
+@keyframes caerCartel {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px) rotate(-10deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) rotate(-2deg);
+    }
+}
+
+@keyframes aparecerBoton {
+    0% {
+        opacity: 0;
+        transform: scale(0.9) rotate(5deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(1deg);
+    }
+}
+
+h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 7rem;
+    color: var(--negro-absoluto);
+    text-transform: uppercase;
+    letter-spacing: -3px;
+    text-shadow: 2px 2px 0px var(--blanco-roto), 4px 4px 0px var(--blanco-roto), 6px 6px 0px var(--blanco-roto);
+    margin-bottom: 3rem;
+    text-align: center;
+    transform: rotate(-2deg);
+    animation: caerCartel 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+h1:hover {
+    transform: translateY(-8px) rotate(-4deg) scale(1.05);
+    text-shadow: 4px 4px 0px var(--blanco-roto), 8px 8px 0px var(--blanco-roto), 12px 12px 0px var(--blanco-roto);
+    cursor: crosshair;
+}
+
+h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 3.5rem;
+    color: var(--blanco-roto);
+    text-shadow: 3px 3px 0px var(--negro-absoluto), 6px 6px 0px var(--negro-absoluto);
+    transform: rotate(1deg);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.subtitulo {
+    background-color: var(--negro-absoluto);
+    color: var(--blanco-roto);
+    padding: 0.5rem 1rem;
+    transform: rotate(-1deg);
+    margin-bottom: 2rem;
+    display: inline-block;
+    box-shadow: -4px 4px 0px var(--blanco-roto);
+}
+
+/* BOTONES DE LA APP */
+.btn-accion {
+    background-color: var(--blanco-roto);
+    color: var(--negro-absoluto);
+    border: 4px solid var(--negro-absoluto);
+    padding: 1.5rem 3rem;
+    font-size: 1.8rem;
+    font-family: 'Fjalla One', sans-serif;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 8px 8px 0px var(--negro-absoluto);
+    transition: all 0.15s ease-out;
+    display: block;
+    margin: 0 auto 2rem auto;
+    width: 100%;
+    max-width: 400px;
+    opacity: 1;
+    transform: rotate(1deg);
+    animation: aparecerBoton 0.6s ease-out backwards;
+    animation-delay: 0.3s;
+}
+
+.btn-accion:hover {
+    transform: translate(-2px, -2px) rotate(1deg);
+    box-shadow: 10px 10px 0px var(--negro-absoluto);
+}
+
+.btn-accion:active {
+    transform: translate(6px, 6px) rotate(0deg);
+    box-shadow: 2px 2px 0px var(--blanco-roto);
+}
+
+.btn-secundario {
+    animation-delay: 0.5s;
+}
+
+/* FORMULARIO DE EMOCIONES */
+.cuadricula-emociones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 2rem;
+}
+
+.cuadricula-emociones input[type="checkbox"] {
+    display: none;
+}
+
+.emocion-label {
+    background-color: var(--blanco-roto);
+    color: var(--negro-absoluto);
+    border: 4px solid var(--negro-absoluto);
+    padding: 1rem;
+    font-size: 1.2rem;
+    text-align: center;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 6px 6px 0px var(--negro-absoluto);
+    transition: all 0.15s ease-out;
+    display: block;
+    position: relative;
+}
+
+.emocion-label:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0px var(--negro-absoluto);
+}
+
+.cuadricula-emociones input[type="checkbox"]:checked+.emocion-label {
+    background-color: var(--negro-absoluto);
+    color: var(--blanco-roto);
+    box-shadow: 0px 0px 0px var(--negro-absoluto);
+    transform: translate(6px, 6px);
+    border-color: var(--blanco-roto);
+}
+
+.cuadricula-emociones input[type="checkbox"]:disabled+.emocion-label {
+    opacity: 0.3;
+    cursor: not-allowed;
+    filter: grayscale(100%);
+    box-shadow: 2px 2px 0px var(--negro-absoluto);
+    transform: translate(4px, 4px);
+}
+
+
+
+#pantalla-inicio,
+#pantalla-interrogatorio,
+#pantalla-resultados {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+}
+
+/* ZONA DE RESULTADOS (TARJETAS TMDB) */
+.contenedor-saul-bass {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2.5rem;
+    width: 100%;
+    max-width: 1200px;
+    padding: 2rem 0;
+}
+
+.tarjeta-pelicula {
+    background-color: var(--rojo-bass);
+    border: 6px solid var(--negro-absoluto);
+    box-shadow: 12px 12px 0px var(--negro-absoluto);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta-pelicula:hover {
+    transform: translate(-5px, -5px);
+    box-shadow: 17px 17px 0px var(--negro-absoluto);
+}
+
+.poster-pelicula {
+    width: 100%;
+    height: auto;
+    border: 4px solid var(--negro-absoluto);
+    filter: sepia(20%) contrast(110%);
+    margin-bottom: 1rem;
+    background-color: var(--negro-absoluto);
+}
+
+.titulo-pelicula {
+    font-family: 'Oswald', sans-serif;
+    color: var(--blanco-roto);
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 0px var(--negro-absoluto);
+}
+
+.nota-pelicula {
+    background-color: var(--negro-absoluto);
+    color: var(--blanco-roto);
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    font-size: 1.2rem;
+    transform: rotate(-2deg);
+    margin-bottom: 1rem;
+    align-self: flex-start;
+}
+
+.sinopsis-pelicula {
+    font-family: monospace;
+    color: var(--blanco-roto);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: justify;
+    background-color: rgba(10, 10, 10, 0.4);
+    padding: 1rem;
+    border-left: 4px solid var(--negro-absoluto);
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* --- ESTILOS DEL CONTENEDOR DEL FILTRO --- */
+.contenedor-filtro-anime {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Lo centra encima del botón */
+    gap: 15px;
+    /* Espacio entre el texto y el interruptor */
+    margin: 25px 0;
+    /* Margen por arriba y por abajo */
+    font-family: Arial, sans-serif;
+    /* Ajusta a la fuente de tu web */
+    font-weight: bold;
+}
+
+.texto-filtro {
+    font-size: 1.1rem;
+    color: #333;
+    /* Ajusta si tu web es modo oscuro */
+}

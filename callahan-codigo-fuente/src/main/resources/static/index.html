@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Callahan - Tu Detective de Cine</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <script src="js/landing.js" defer></script>
+
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">CALLAHAN</div>
+        <div class="nav-links">
+            <!-- Añadimos un ID para poder capturarlo en landing.js -->
+            <button id="btn-iniciar-sesion">Iniciar Sesión</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>CALLAHAN</h1>
+            <p>"Sé lo que estás pensando: ¿ha filtrado seis géneros o solo cinco?"</p>
+            <button class="btn-principal">Crear una cuenta gratis</button>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <h3>1. BLINDA TU PERFIL</h3>
+                <p>Dinos qué géneros odias y qué directores no soportas. Jamás volverás a cruzarte con una de sus
+                    películas. El filtro es implacable.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>2. CONFIESA TU ESTADO</h3>
+                <p>¿Quieres tensión? ¿Llorar a mares? ¿Desconectar y reír? Dinos qué te pide el cuerpo hoy y ajustaremos
+                    el interrogatorio.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>3. CASO RESUELTO</h3>
+                <p>Olvídate de hacer scroll infinito. Te entregamos un expediente con las mejores películas exactas para
+                    este preciso momento.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Callahan - Motor de Recomendación de Cine</p>
+    </footer>
+
+    <div id="modal-overlay" class="oculto"></div>
+
+    <div id="modal-login" class="modal-saul-bass oculto">
+        <button class="btn-cerrar" id="cerrar-login">X</button>
+        <h2>INICIAR SESIÓN</h2>
+        <form id="form-login">
+            <!-- Cambiamos email por texto y ajustamos los IDs -->
+            <div class="grupo-input">
+                <label for="login-usuario">Nombre en Clave (Usuario)</label>
+                <input type="text" id="login-usuario" required>
+            </div>
+            <div class="grupo-input">
+                <label for="login-password">Contraseña</label>
+                <input type="password" id="login-password" required>
+            </div>
+            <button type="submit" class="btn-accion">ENTRAR</button>
+        </form>
+    </div>
+
+    <div id="modal-registro" class="modal-saul-bass oculto">
+        <button class="btn-cerrar" id="cerrar-registro">X</button>
+        <h2>NUEVO DETECTIVE</h2>
+        <form id="form-registro">
+
+            <fieldset>
+                <legend>Datos Personales</legend>
+                <p>Para poder crear tu perfil necesitamos algunos datos personales. No los compartiremos con nadie.</p>
+                <div class="grupo-input">
+                    <label for="reg-nombre">Nombre Real</label>
+                    <input type="text" id="reg-nombre" required title="Por favor, introduce tu nombre real.">
+                </div>
+                <div class="grupo-input">
+                    <label for="reg-apellido">Primer Apellido</label>
+                    <input type="text" id="reg-apellido" required title="Por favor, introduce tu primer apellido.">
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Datos de Contacto</legend>
+                <p>Proporciona tu información de contacto para que podamos mantenerte informado.</p>
+                <div class="grupo-input">
+                    <label for="reg-email">Correo Electrónico</label>
+                    <input type="email" id="reg-email" required
+                        title="Por favor, introduce un correo electrónico válido.">
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Datos de Ingreso</legend>
+                <p>Crea un nombre de usuario y una contraseña para acceder a tu perfil.</p>
+                <div class="grupo-input">
+                    <label for="reg-usuario">Nombre en Clave (Usuario)</label>
+                    <input type="text" id="reg-usuario" required minlength="3" maxlength="20"
+                        title="El nombre de usuario debe tener entre 3 y 20 caracteres.">
+
+                </div>
+                <div class="grupo-input">
+                    <label for="reg-password">Contraseña</label>
+                    <input type="password" id="reg-password" required minlength="6" maxlength="100"
+                        title="La contraseña debe tener entre 6 y 100 caracteres.">
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Información Adicional</legend>
+                <p>Proporciona algunos detalles adicionales sobre ti.</p>
+                <div class="grupo-input">
+                    <label for="reg-fecha">Fecha de Nacimiento</label>
+                    <input type="date" id="reg-fecha" required title="Por favor, introduce tu fecha de nacimiento.">
+                </div>
+                <div class="grupo-input">
+                    <label for="reg-pais">País de Operaciones</label>
+                    <input type="text" id="reg-pais" list="lista-paises" placeholder="Empieza a escribir..." required
+                        autocomplete="nope">
+
+                    <datalist id="lista-paises">
+                    </datalist>
+                </div>
+            </fieldset>
+
+            <button type="submit" class="btn-accion">UNIRSE AL CUERPO</button>
+        </form>
+    </div>
+
+</body>
+
+</html>
