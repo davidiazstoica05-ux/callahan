@@ -1,9 +1,46 @@
 models:
-  Category:
-    name: string nullable
+  Platform:
+    name: string:50
+    relationships:
+      belongsToMany: User
+
+  Genre:
+    name: string:50 unique
+
+  Director:
+    name: string:100
+
+  Movie:
+    tmdb_id: biginteger unique
+    title: string
+    synopsis: text
+    duration: integer
+    year: integer
+    poster_url: string
+    last_synced_at: timestamp
+    relationships:
+      belongsToMany: Genre, Director
+      hasMany: Interaction
+
+  Interaction:
     user_id: id:user
-  Post:
-    title: string nullable
-    description: text nullable
+    movie_id: id:movie
+    type: string:20
+    source: string:20
+    occurred_at: timestamp
+    rating: tinyinteger nullable
+
+  Preference:
     user_id: id:user
-    category_id: id:category
+    score: float
+
+  AlgorithmConfig:
+    adjustment_factor: float
+    clamp_min: float
+    clamp_max: float
+    cutoff_score: float
+    list_size: integer
+    era_weight: float
+    director_weight: float
+    genre_weight: float
+    duration_weight: float

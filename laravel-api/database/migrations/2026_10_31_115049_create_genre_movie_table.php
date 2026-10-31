@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('plataform', function (Blueprint $table) {
-            $table->id();
-            $table->text('name');
-            $table->timestamps();
+        Schema::create('genre_movie', function (Blueprint $table) {
+            $table->foreignId('genre_id');
+            $table->foreignId('movie_id');
         });
     }
 
@@ -23,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('plataform');
+        Schema::dropIfExists('genre_movie');
     }
 };

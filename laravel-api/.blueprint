@@ -1,10 +1,34 @@
 created:
-    - database/factories/CategoryFactory.php
-    - database/factories/PostFactory.php
-    - database/migrations/2026_10_28_122859_create_categories_table.php
-    - database/migrations/2026_10_28_122900_create_posts_table.php
-    - app/Models/Category.php
-    - app/Models/Post.php
+    - database/factories/PlatformFactory.php
+    - database/factories/GenreFactory.php
+    - database/factories/DirectorFactory.php
+    - database/factories/MovieFactory.php
+    - database/factories/InteractionFactory.php
+    - database/factories/PreferenceFactory.php
+    - database/factories/AlgorithmConfigFactory.php
+    - database/migrations/2026_10_31_115041_create_platforms_table.php
+    - database/migrations/2026_10_31_115042_create_genres_table.php
+    - database/migrations/2026_10_31_115043_create_directors_table.php
+    - database/migrations/2026_10_31_115044_create_movies_table.php
+    - database/migrations/2026_10_31_115045_create_interactions_table.php
+    - database/migrations/2026_10_31_115046_create_preferences_table.php
+    - database/migrations/2026_10_31_115047_create_algorithm_configs_table.php
+    - database/migrations/2026_10_31_115048_create_platform_user_table.php
+    - database/migrations/2026_10_31_115049_create_genre_movie_table.php
+    - database/migrations/2026_10_31_115050_create_director_movie_table.php
+    - app/Models/Platform.php
+    - app/Models/Genre.php
+    - app/Models/Director.php
+    - app/Models/Movie.php
+    - app/Models/Interaction.php
+    - app/Models/Preference.php
+    - app/Models/AlgorithmConfig.php
 models:
-    Category: { name: 'string nullable', user_id: 'id:user' }
-    Post: { title: 'string nullable', description: 'text nullable', user_id: 'id:user', category_id: 'id:category' }
+    User: {}
+    Platform: { name: 'string:50', relationships: { belongsToMany: User } }
+    Genre: { name: 'string:50 unique' }
+    Director: { name: 'string:100' }
+    Movie: { tmdb_id: 'biginteger unique', title: string, synopsis: text, duration: integer, year: integer, poster_url: string, last_synced_at: timestamp, relationships: { belongsToMany: 'Genre, Director', hasMany: Interaction } }
+    Interaction: { user_id: 'id:user', movie_id: 'id:movie', type: 'string:20', source: 'string:20', occurred_at: timestamp, rating: 'tinyinteger nullable' }
+    Preference: { user_id: 'id:user', score: float }
+    AlgorithmConfig: { adjustment_factor: float, clamp_min: float, clamp_max: float, cutoff_score: float, list_size: integer, era_weight: float, director_weight: float, genre_weight: float, duration_weight: float }
